@@ -23,7 +23,7 @@ func (dh *DonationHandler) GetAllDonation(c echo.Context) error {
 	result := dh.donationBussiness.GetAllData("")
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		// "claims":  middleware.ExtractClaim(c),
-		"message": "Get data OK",
+		"message": "Success",
 		"data":    presentation_response.FromCoreSlice(result),
 	})
 

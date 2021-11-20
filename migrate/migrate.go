@@ -6,7 +6,9 @@ import (
 )
 
 func AutoMigrate() {
-	config.DB.AutoMigrate(&m_donation.Donation{})
+	config.DB.AutoMigrate(
+		&m_donation.Donation{},
+		&m_donation.DescriptionDonation{})
 }
 
 //To migrate two and up
