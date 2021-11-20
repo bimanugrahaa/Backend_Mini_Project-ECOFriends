@@ -3,9 +3,17 @@ package donation
 import "time"
 
 type Core struct {
-	ID         int
-	Title      string
-	Created_at time.Time
+	ID          int
+	Title       string
+	Description DescriptionCore
+	Created_at  time.Time
+}
+
+type DescriptionCore struct {
+	ID               int
+	Description      string
+	Target_Donation  int
+	Current_Donation int
 }
 
 type Bussiness interface {

@@ -7,8 +7,10 @@ import (
 )
 
 func AutoMigrate() {
-	config.DB.AutoMigrate(&m_donation.Donation{})
-	config.DB.AutoMigrate(&m_user.User{})
+	config.DB.AutoMigrate(
+		&m_donation.Donation{},
+		&m_donation.DescriptionDonation{},
+    &m_user.User{})
 }
 
 //To migrate two and up

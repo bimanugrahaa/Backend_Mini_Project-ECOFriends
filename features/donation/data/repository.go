@@ -21,8 +21,12 @@ func (dr *mysqlDonationRepository) InsertData(data donation.Core) (resp donation
 }
 
 func (dr *mysqlDonationRepository) SelectData(title string) (resp []donation.Core) {
-	record := []Donation{}
-	if err := dr.Conn.Find(&record).Error; err != nil {
+	// record := []Donation{}
+	// if err := dr.Conn.Find(&record).Error; err != nil {
+	// 	return []donation.Core{}
+	// }
+	var record []Donation
+	if err := dr.Conn.Preload("Description").Find(&record).Error; err != nil {
 		return []donation.Core{}
 	}
 	return toCoreList(record)
