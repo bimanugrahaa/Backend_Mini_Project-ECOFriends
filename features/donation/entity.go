@@ -1,6 +1,8 @@
 package donation
 
-import "time"
+import (
+	"time"
+)
 
 type Core struct {
 	ID          int
@@ -28,6 +30,7 @@ type Bussiness interface {
 	// CreateDescriptionDonation(data DescriptionCore) (resp DescriptionCore, err error)
 	GetAllDonations() (resp []Core)
 	GetDonationsById(id int) (resp Core)
+	DeleteDonationsById(id int) (err error)
 	//Another CRUD
 }
 
@@ -37,4 +40,5 @@ type Data interface {
 	// InsertDescriptionDonation(data DescriptionCore) (resp DescriptionCore, err error)
 	SelectAllDonations() (resp []Core)
 	SelectDonationsById(id int) (resp Core)
+	RemoveDonationsById(id int) (err error)
 }

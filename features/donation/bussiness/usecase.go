@@ -36,16 +36,16 @@ func (du *donationUsecase) CreateDonation(data donation.Core) (resp donation.Cor
 	return donation.Core{}, nil
 }
 
-// func (du *donationUsecase) CreateDescriptionDonation(data donation.DescriptionCore) (resp donation.DescriptionCore, err error) {
-// 	resp, err = du.donationData.InsertDescriptionDonation(data)
-// 	if err != nil {
-// 		return donation.DescriptionCore{}, err
-// 	}
+func (du *donationUsecase) DeleteDonationsById(id int) (err error) {
 
-// 	// return resp, nil
+	err = du.donationData.RemoveDonationsById(id)
 
-// 	return donation.DescriptionCore{}, nil
-// }
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func (du *donationUsecase) GetAllDonations() (resp []donation.Core) {
 	resp = du.donationData.SelectAllDonations()

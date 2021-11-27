@@ -27,16 +27,12 @@ func (dr *mysqlDonationRepository) InsertDonation(data donation.Core) (resp dona
 	return donation.Core{}, nil
 }
 
-// func (dr *mysqlDonationRepository) InsertDescriptionDonation(data donation.DescriptionCore) (resp donation.DescriptionCore, err error) {
-
-// 	record := fromDescriptionCore(data)
-// 	fmt.Println("record desc", record)
-// 	if err := dr.Conn.Create(&record).Error; err != nil {
-// 		return donation.DescriptionCore{}, err
-// 	}
-
-// 	return donation.DescriptionCore{}, nil
-// }
+func (dr *mysqlDonationRepository) RemoveDonationsById(id int) (err error) {
+	if err := dr.Conn.Delete(&Donation{}, id).Error; err != nil {
+		return err
+	}
+	return nil
+}
 
 func (dr *mysqlDonationRepository) SelectAllDonations() (resp []donation.Core) {
 	// record := []Donation{}

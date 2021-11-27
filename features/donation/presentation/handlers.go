@@ -63,6 +63,19 @@ func (dh *DonationHandler) CreateDonation(c echo.Context) error {
 	})
 }
 
+func (dh *DonationHandler) DeleteDonationsById(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	fmt.Println(id)
+	err := dh.donationBussiness.DeleteDonationsById(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "delete donation by id success",
+	})
+}
+
 // func (dh *DonationHandler) CreateDescriptionDonation(c echo.Context) error {
 // 	newDonationDescription := request.DonationDescription{}
 
