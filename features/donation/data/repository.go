@@ -34,6 +34,16 @@ func (dr *mysqlDonationRepository) RemoveDonationsById(id int) (err error) {
 	return nil
 }
 
+func (dr *mysqlDonationRepository) EditDonation(data donation.Core) (resp donation.Core) {
+	record := fromCore(data)
+
+	if err := dr.Conn.Joins("description_donations").Where("id = ?", data.ID).Where("description.post_id = ?", data.Description.ID).Updates(&record).Error; err != nil {
+		return donation.Core{}
+	}
+
+	return donation.Core{}
+}
+
 func (dr *mysqlDonationRepository) SelectAllDonations() (resp []donation.Core) {
 	// record := []Donation{}
 	// if err := dr.Conn.Find(&record).Error; err != nil {

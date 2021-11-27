@@ -76,6 +76,23 @@ func (dh *DonationHandler) DeleteDonationsById(c echo.Context) error {
 	})
 }
 
+func (dh *DonationHandler) UpdateDonation(c echo.Context) error {
+	// id, _ := strconv.Atoi(c.Param("id"))
+	newDonation := request.Donation{}
+
+	c.Bind(&newDonation)
+
+	result := dh.donationBussiness.UpdateDonation(presentation_request.ToCore(newDonation))
+	// if result != nil {
+	// 	return c.JSON(http.StatusInternalServerError)
+	// }
+
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		"message": "success",
+		"data":    presentation_response.FromCoreDetail(result),
+	})
+}
+
 // func (dh *DonationHandler) CreateDescriptionDonation(c echo.Context) error {
 // 	newDonationDescription := request.DonationDescription{}
 

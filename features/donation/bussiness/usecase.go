@@ -47,6 +47,12 @@ func (du *donationUsecase) DeleteDonationsById(id int) (err error) {
 	return nil
 }
 
+func (du *donationUsecase) UpdateDonation(data donation.Core) (resp donation.Core) {
+	resp = du.donationData.EditDonation(data)
+
+	return
+}
+
 func (du *donationUsecase) GetAllDonations() (resp []donation.Core) {
 	resp = du.donationData.SelectAllDonations()
 

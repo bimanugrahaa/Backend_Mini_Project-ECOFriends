@@ -31,6 +31,7 @@ type Bussiness interface {
 	GetAllDonations() (resp []Core)
 	GetDonationsById(id int) (resp Core)
 	DeleteDonationsById(id int) (err error)
+	UpdateDonation(data Core) (resp Core)
 	//Another CRUD
 }
 
@@ -41,4 +42,5 @@ type Data interface {
 	SelectAllDonations() (resp []Core)
 	SelectDonationsById(id int) (resp Core)
 	RemoveDonationsById(id int) (err error)
+	EditDonation(data Core) (resp Core)
 }
