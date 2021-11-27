@@ -23,7 +23,7 @@ func (uu *userUsecase) CreateUser(data user.UserCore) (resp user.UserCore, err e
 }
 
 func (uu *userUsecase) GetAllUser() (resp []user.UserCore) {
-	resp = uu.userData.SelectData()
+	resp = uu.userData.SelectAllUser()
 	return
 }
 

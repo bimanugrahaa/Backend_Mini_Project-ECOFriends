@@ -25,14 +25,14 @@ type UserCore struct {
 
 type Bussiness interface {
 	CreateData(data Core) (resp Core, err error)
-	GetAllData() (resp []Core)
-	// GetUserById() (resp []UserCore, err error)
+	GetAllDonations() (resp []Core)
+	GetDonationsById(id int) (resp Core)
 	//Another CRUD
 }
 
 //Initialize Port
 type Data interface {
 	InsertData(data Core) (resp Core, err error)
-	SelectData() (resp []Core)
-	// SelectUserById(id int) (resp UserCore)
+	SelectAllDonations() (resp []Core)
+	SelectDonationsById(id int) (resp Core)
 }

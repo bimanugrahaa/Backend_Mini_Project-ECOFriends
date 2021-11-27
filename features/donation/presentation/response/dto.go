@@ -2,21 +2,27 @@ package response
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
-	"fmt"
 	"time"
 )
 
 type Donation struct {
 	ID          int                 `json:"id"`
 	Title       string              `json:"title"`
-	AuthorID    int                 `json:"author_id"`
 	Created_at  time.Time           `json:"created_at"`
-	Description DescriptionDonation `json:"desc"`
+	Description DonationDescription `json:"description"`
+	AuthorID    int                 `json:"author_id"`
 	Author      AuthorDonation      `json:"author"`
 }
 
-//Add author from user from donation.bussiness
-type DescriptionDonation struct {
+type DonationList struct {
+	ID         int            `json:"id"`
+	Title      string         `json:"title"`
+	Created_at time.Time      `json:"created_at"`
+	AuthorID   int            `json:"author_id"`
+	Author     AuthorDonation `json:"author"`
+}
+
+type DonationDescription struct {
 	ID               int    `json:"post_id"`
 	Description      string `json:"desc"`
 	Target_Donation  int    `json:"target_donation"`
@@ -28,9 +34,9 @@ type AuthorDonation struct {
 	Name string `json:"name"`
 }
 
-// func FromDescriptionDonationCore(core donation.DescriptionCore) DescriptionDonation {
+// func FromDescriptionDonationCore(core donation.DescriptionCore) DonationDescription {
 
-// 	return DescriptionDonation{
+// 	return DonationDescription{
 // 		ID:               core.ID,
 // 		Description:      core.Description,
 // 		Target_Donation:  core.Target_Donation,
@@ -39,16 +45,14 @@ type AuthorDonation struct {
 // }
 
 // func FromUsers(resp donation.Bussiness) AuthorDonation {
-// 	AuthorDonation = resp.GetAllData()
+// 	AuthorDonation = resp.GetAllDonations()
 // 	return AuthorDonation{
-// 		ID: resp.GetAllData(),
+// 		ID: resp.GetAllDonations(),
 // 	}
 // }
 
-func FromDescriptionDonationCoreList(resp donation.DescriptionCore) DescriptionDonation {
-	// fmt.Println(resp)
-
-	return DescriptionDonation{
+func FromDescriptionDonationCore(resp donation.DescriptionCore) DonationDescription {
+	return DonationDescription{
 		ID:               resp.ID,
 		Description:      resp.Description,
 		Target_Donation:  resp.Target_Donation,
@@ -57,27 +61,37 @@ func FromDescriptionDonationCoreList(resp donation.DescriptionCore) DescriptionD
 }
 
 func FromUserCore(uc donation.UserCore) AuthorDonation {
-	fmt.Println("uc", uc)
 	return AuthorDonation{
 		ID:   uc.ID,
 		Name: uc.Name,
 	}
 }
 
-func FromCore(core donation.Core) Donation {
+func FromCore(core donation.Core) DonationList {
 
+	return DonationList{
+		ID:         core.ID,
+		Title:      core.Title,
+		AuthorID:   core.AuthorID,
+		Author:     FromUserCore(core.Author),
+		Created_at: core.Created_at,
+		// Description: FromDescriptionDonationCore(core.Description),
+	}
+}
+
+func FromCoreDetail(core donation.Core) Donation {
 	return Donation{
 		ID:          core.ID,
 		Title:       core.Title,
 		AuthorID:    core.AuthorID,
 		Author:      FromUserCore(core.Author),
 		Created_at:  core.Created_at,
-		Description: FromDescriptionDonationCoreList(core.Description),
+		Description: FromDescriptionDonationCore(core.Description),
 	}
 }
 
-func FromCoreSlice(core []donation.Core) []Donation {
-	var donationArray []Donation
+func FromCoreSlice(core []donation.Core) []DonationList {
+	var donationArray []DonationList
 	for key := range core {
 		donationArray = append(donationArray, FromCore(core[key]))
 	}

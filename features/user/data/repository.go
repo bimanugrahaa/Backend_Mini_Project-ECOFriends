@@ -20,7 +20,7 @@ func (ur *mysqlUserRepository) InsertData(data user.UserCore) (resp user.UserCor
 	return user.UserCore{}, nil
 }
 
-func (ur *mysqlUserRepository) SelectData() (resp []user.UserCore) {
+func (ur *mysqlUserRepository) SelectAllUser() (resp []user.UserCore) {
 	record := []User{}
 	if err := ur.Conn.Find(&record).Error; err != nil {
 		return []user.UserCore{}

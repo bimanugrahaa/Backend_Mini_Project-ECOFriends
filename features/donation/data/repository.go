@@ -20,16 +20,24 @@ func (dr *mysqlDonationRepository) InsertData(data donation.Core) (resp donation
 	return donation.Core{}, nil
 }
 
-func (dr *mysqlDonationRepository) SelectData() (resp []donation.Core) {
+func (dr *mysqlDonationRepository) SelectAllDonations() (resp []donation.Core) {
 	// record := []Donation{}
 	// if err := dr.Conn.Find(&record).Error; err != nil {
 	// 	return []donation.Core{}
 	// }
 	var record []Donation
-	if err := dr.Conn.Preload("Description").Find(&record).Error; err != nil {
+	if err := dr.Conn.Find(&record).Error; err != nil {
 		return []donation.Core{}
 	}
 	return toCoreList(record)
+}
+
+func (dr *mysqlDonationRepository) SelectDonationsById(id int) (resp donation.Core) {
+	var record Donation
+	if err := dr.Conn.Preload("Description").First(&record, id).Error; err != nil {
+		return donation.Core{}
+	}
+	return toCoreDetail(&record)
 }
 
 // func (dr *mysqlDonationRepository) GetUserById(id int) {

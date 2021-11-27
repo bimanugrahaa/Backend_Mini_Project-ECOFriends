@@ -20,6 +20,6 @@ type Bussiness interface {
 
 type Data interface {
 	InsertData(data UserCore) (resp UserCore, err error)
-	SelectData() (resp []UserCore)
+	SelectAllUser() (resp []UserCore)
 	SelectUserById(id int) (resp UserCore, err error)
 }

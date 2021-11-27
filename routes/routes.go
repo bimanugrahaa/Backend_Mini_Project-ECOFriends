@@ -14,7 +14,9 @@ func New() *echo.Echo {
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
 
+	//Donations
 	e.GET("/donations", presenter.DonationPresentation.GetAllDonation)
+	e.GET("/donations/:id", presenter.DonationPresentation.GetDonationsById)
 	e.GET("/users", presenter.UserPresentation.GetAllUser)
 
 	return e
