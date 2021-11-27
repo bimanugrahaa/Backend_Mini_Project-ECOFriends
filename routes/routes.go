@@ -17,6 +17,9 @@ func New() *echo.Echo {
 	//Donations
 	e.GET("/donations", presenter.DonationPresentation.GetAllDonation)
 	e.GET("/donations/:id", presenter.DonationPresentation.GetDonationsById)
+	e.POST("/donations", presenter.DonationPresentation.CreateDonation)
+	// e.POST("/donations", presenter.DonationPresentation.CreateDescriptionDonation)
+
 	e.GET("/users", presenter.UserPresentation.GetAllUser)
 
 	return e

@@ -71,3 +71,31 @@ func toCoreList(resp []Donation) []donation.Core {
 
 	return d
 }
+
+func fromDescriptionCore(dc donation.DescriptionCore) DescriptionDonation {
+	return DescriptionDonation{
+		Description:      dc.Description,
+		Target_Donation:  dc.Target_Donation,
+		Current_Donation: dc.Current_Donation,
+	}
+}
+
+func fromCore(core donation.Core) Donation {
+	return Donation{
+		Title:       core.Title,
+		AuthorID:    core.AuthorID,
+		Description: fromDescriptionCore(core.Description),
+	}
+}
+
+// func fromCore(core donation.Core) Donation {
+// 	return Donation{
+// 		Title:    core.Title,
+// 		AuthorID: core.AuthorID,
+// 		Description: DescriptionDonation{
+// 			Description:      core.Description.Description,
+// 			Target_Donation:  core.Description.Target_Donation,
+// 			Current_Donation: core.Description.Current_Donation,
+// 		},
+// 	}
+// }

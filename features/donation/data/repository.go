@@ -2,6 +2,7 @@ package data
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -16,9 +17,26 @@ func NewDonationRepository(conn *gorm.DB) donation.Data {
 	}
 }
 
-func (dr *mysqlDonationRepository) InsertData(data donation.Core) (resp donation.Core, err error) {
+func (dr *mysqlDonationRepository) InsertDonation(data donation.Core) (resp donation.Core, err error) {
+
+	record := fromCore(data)
+	fmt.Println("record", record)
+	if err := dr.Conn.Create(&record).Error; err != nil {
+		return donation.Core{}, err
+	}
 	return donation.Core{}, nil
 }
+
+// func (dr *mysqlDonationRepository) InsertDescriptionDonation(data donation.DescriptionCore) (resp donation.DescriptionCore, err error) {
+
+// 	record := fromDescriptionCore(data)
+// 	fmt.Println("record desc", record)
+// 	if err := dr.Conn.Create(&record).Error; err != nil {
+// 		return donation.DescriptionCore{}, err
+// 	}
+
+// 	return donation.DescriptionCore{}, nil
+// }
 
 func (dr *mysqlDonationRepository) SelectAllDonations() (resp []donation.Core) {
 	// record := []Donation{}

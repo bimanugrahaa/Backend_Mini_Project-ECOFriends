@@ -21,20 +21,31 @@ func NewDonationBussiness(donationData donation.Data, userData user.Bussiness) d
 	}
 }
 
-func (du *donationUsecase) CreateData(data donation.Core) (resp donation.Core, err error) {
+func (du *donationUsecase) CreateDonation(data donation.Core) (resp donation.Core, err error) {
 	// if err := du.validate.Struct(data); err != nil {
 	// 	return donation.Core{}, err
 	// }
 
-	// resp, err = du.donationData.InsertData(data)
-	// if err != nil {
-	// 	return donation.Core{}, err
-	// }
+	resp, err = du.donationData.InsertDonation(data)
+	if err != nil {
+		return donation.Core{}, err
+	}
 
 	// return resp, nil
 
 	return donation.Core{}, nil
 }
+
+// func (du *donationUsecase) CreateDescriptionDonation(data donation.DescriptionCore) (resp donation.DescriptionCore, err error) {
+// 	resp, err = du.donationData.InsertDescriptionDonation(data)
+// 	if err != nil {
+// 		return donation.DescriptionCore{}, err
+// 	}
+
+// 	// return resp, nil
+
+// 	return donation.DescriptionCore{}, nil
+// }
 
 func (du *donationUsecase) GetAllDonations() (resp []donation.Core) {
 	resp = du.donationData.SelectAllDonations()

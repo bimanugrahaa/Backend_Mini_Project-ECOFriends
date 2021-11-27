@@ -24,7 +24,8 @@ type UserCore struct {
 }
 
 type Bussiness interface {
-	CreateData(data Core) (resp Core, err error)
+	CreateDonation(data Core) (resp Core, err error)
+	// CreateDescriptionDonation(data DescriptionCore) (resp DescriptionCore, err error)
 	GetAllDonations() (resp []Core)
 	GetDonationsById(id int) (resp Core)
 	//Another CRUD
@@ -32,7 +33,8 @@ type Bussiness interface {
 
 //Initialize Port
 type Data interface {
-	InsertData(data Core) (resp Core, err error)
+	InsertDonation(data Core) (resp Core, err error)
+	// InsertDescriptionDonation(data DescriptionCore) (resp DescriptionCore, err error)
 	SelectAllDonations() (resp []Core)
 	SelectDonationsById(id int) (resp Core)
 }

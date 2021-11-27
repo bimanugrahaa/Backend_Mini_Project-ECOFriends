@@ -2,6 +2,8 @@ package c_donation
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
+	"Backend_Mini_Project-ECOFriends/features/donation/presentation/request"
+	presentation_request "Backend_Mini_Project-ECOFriends/features/donation/presentation/request"
 	presentation_response "Backend_Mini_Project-ECOFriends/features/donation/presentation/response"
 	"fmt"
 	"strconv"
@@ -42,3 +44,38 @@ func (dh *DonationHandler) GetDonationsById(c echo.Context) error {
 		"data":    presentation_response.FromCoreDetail(result),
 	})
 }
+
+func (dh *DonationHandler) CreateDonation(c echo.Context) error {
+	// var newDonation presentation_request.Donation
+
+	newDonation := request.Donation{}
+
+	c.Bind(&newDonation)
+
+	result, err := dh.donationBussiness.CreateDonation(presentation_request.ToCore(newDonation))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		"message": "success",
+		"data":    presentation_response.FromCoreDetail(result),
+	})
+}
+
+// func (dh *DonationHandler) CreateDescriptionDonation(c echo.Context) error {
+// 	newDonationDescription := request.DonationDescription{}
+
+// 	c.Bind(newDonationDescription)
+
+// 	resp, err := dh.donationBussiness.CreateDescriptionDonation(presentation_request.ToDescriptionCore(newDonationDescription))
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, err)
+// 	}
+
+// 	return c.JSON(http.StatusAccepted, map[string]interface{}{
+// 		"message": "Donation successfully added.",
+// 		"data":    presentation_response.FromDescriptionDonationCore(resp),
+// 	})
+
+// }
