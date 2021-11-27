@@ -13,7 +13,9 @@ type Donation struct {
 	gorm.Model
 	Title                 string `gorm:"column:donation_title"`
 	DescriptionDonationID int
-	Description           DescriptionDonation `gorm:"foreignKey:id"`
+	AuthorID              int
+	// Author                Users
+	Description DescriptionDonation `gorm:"foreignKey:id"`
 }
 
 type DescriptionDonation struct {
@@ -24,6 +26,11 @@ type DescriptionDonation struct {
 	Current_Donation int    `gorm:"column:donation_current"`
 }
 
+// type Users struct {
+// 	ID   int
+// 	Name string
+// }
+
 //DTO
 func (dd *DescriptionDonation) toDescriptionCore() donation.DescriptionCore {
 	return donation.DescriptionCore{
@@ -33,6 +40,13 @@ func (dd *DescriptionDonation) toDescriptionCore() donation.DescriptionCore {
 		Current_Donation: dd.Current_Donation,
 	}
 }
+
+// func toUsersCore(resp Users) donation.UserCore {
+// 	return donation.UserCore{
+// 		ID:   resp.ID,
+// 		Name: resp.Name,
+// 	}
+// }
 
 func toDescriptionCoreList(resp DescriptionDonation) donation.DescriptionCore {
 	// descriptionDonation := donation.DescriptionCore{
@@ -56,8 +70,10 @@ func (d *Donation) toCore() donation.Core {
 
 	fmt.Println(d.Description)
 	return donation.Core{
-		ID:          int(d.ID),
-		Title:       d.Title,
+		ID:       int(d.ID),
+		Title:    d.Title,
+		AuthorID: d.AuthorID,
+		// Author:      toUsersCore(d.Author),
 		Created_at:  d.CreatedAt,
 		Description: toDescriptionCoreList(d.Description),
 	}

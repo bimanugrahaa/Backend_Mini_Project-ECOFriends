@@ -10,7 +10,7 @@ func AutoMigrate() {
 	config.DB.AutoMigrate(
 		&m_donation.Donation{},
 		&m_donation.DescriptionDonation{},
-    &m_user.User{})
+		&m_user.User{})
 }
 
 //To migrate two and up

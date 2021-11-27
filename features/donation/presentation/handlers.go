@@ -20,7 +20,7 @@ func NewDonationHandler(dbu donation.Bussiness) *DonationHandler {
 }
 
 func (dh *DonationHandler) GetAllDonation(c echo.Context) error {
-	result := dh.donationBussiness.GetAllData("")
+	result := dh.donationBussiness.GetAllData()
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		// "claims":  middleware.ExtractClaim(c),
 		"message": "Success",

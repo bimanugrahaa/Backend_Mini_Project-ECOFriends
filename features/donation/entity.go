@@ -5,6 +5,8 @@ import "time"
 type Core struct {
 	ID          int
 	Title       string
+	AuthorID    int
+	Author      UserCore
 	Description DescriptionCore
 	Created_at  time.Time
 }
@@ -16,14 +18,21 @@ type DescriptionCore struct {
 	Current_Donation int
 }
 
+type UserCore struct {
+	ID   int
+	Name string
+}
+
 type Bussiness interface {
 	CreateData(data Core) (resp Core, err error)
-	GetAllData(search string) (resp []Core)
+	GetAllData() (resp []Core)
+	// GetUserById() (resp []UserCore, err error)
 	//Another CRUD
 }
 
 //Initialize Port
 type Data interface {
 	InsertData(data Core) (resp Core, err error)
-	SelectData(title string) (resp []Core)
+	SelectData() (resp []Core)
+	// SelectUserById(id int) (resp UserCore)
 }

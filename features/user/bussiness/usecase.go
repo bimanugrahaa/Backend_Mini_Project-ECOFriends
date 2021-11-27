@@ -26,3 +26,8 @@ func (uu *userUsecase) GetAllUser() (resp []user.UserCore) {
 	resp = uu.userData.SelectData()
 	return
 }
+
+func (uu *userUsecase) GetUserById(id int) (resp user.UserCore, err error) {
+	resp, err = uu.userData.SelectUserById(id)
+	return
+}

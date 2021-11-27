@@ -27,3 +27,13 @@ func (ur *mysqlUserRepository) SelectData() (resp []user.UserCore) {
 	}
 	return toCoreList(record)
 }
+
+func (ur *mysqlUserRepository) SelectUserById(id int) (resp user.UserCore, err error) {
+	record := User{}
+
+	if err := ur.Conn.First(&record, id).Error; err != nil {
+		return user.UserCore{}, err
+	}
+
+	return toCore(&record), err
+}

@@ -27,3 +27,7 @@ func (uh *UserHandler) GetAllUser(c echo.Context) error {
 		"data":    user_response.FromCoreSlice(result),
 	})
 }
+
+// func (uh *UserHandler)  {
+
+// }
