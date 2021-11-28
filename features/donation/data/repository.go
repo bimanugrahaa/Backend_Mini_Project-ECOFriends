@@ -31,6 +31,9 @@ func (dr *mysqlDonationRepository) InsertDonation(data donation.Core) (resp dona
 }
 
 func (dr *mysqlDonationRepository) RemoveDonationsById(id int) (err error) {
+	if err := dr.Conn.Delete(&DescriptionDonation{}, id).Error; err != nil {
+		return err
+	}
 	if err := dr.Conn.Delete(&Donation{}, id).Error; err != nil {
 		return err
 	}
