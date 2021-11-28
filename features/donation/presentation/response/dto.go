@@ -34,23 +34,6 @@ type AuthorDonation struct {
 	Name string `json:"name"`
 }
 
-// func FromDescriptionDonationCore(core donation.DescriptionCore) DonationDescription {
-
-// 	return DonationDescription{
-// 		ID:               core.ID,
-// 		Description:      core.Description,
-// 		Target_Donation:  core.Target_Donation,
-// 		Current_Donation: core.Current_Donation,
-// 	}
-// }
-
-// func FromUsers(resp donation.Bussiness) AuthorDonation {
-// 	AuthorDonation = resp.GetAllDonations()
-// 	return AuthorDonation{
-// 		ID: resp.GetAllDonations(),
-// 	}
-// }
-
 func FromDescriptionDonationCore(resp donation.DescriptionCore) DonationDescription {
 	return DonationDescription{
 		ID:               resp.ID,
@@ -75,7 +58,6 @@ func FromCore(core donation.Core) DonationList {
 		AuthorID:   core.AuthorID,
 		Author:     FromUserCore(core.Author),
 		Created_at: core.Created_at,
-		// Description: FromDescriptionDonationCore(core.Description),
 	}
 }
 

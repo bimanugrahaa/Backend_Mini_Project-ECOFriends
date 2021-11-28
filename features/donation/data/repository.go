@@ -22,8 +22,11 @@ func (dr *mysqlDonationRepository) InsertDonation(data donation.Core) (resp dona
 	record := fromCore(data)
 	fmt.Println("record", record)
 	if err := dr.Conn.Create(&record).Error; err != nil {
+
 		return donation.Core{}, err
 	}
+
+	fmt.Println(dr.Conn.Create(&record))
 	return donation.Core{}, nil
 }
 
@@ -34,25 +37,27 @@ func (dr *mysqlDonationRepository) RemoveDonationsById(id int) (err error) {
 	return nil
 }
 
-func (dr *mysqlDonationRepository) EditDonation(data donation.Core) (resp donation.Core) {
+func (dr *mysqlDonationRepository) EditDonation(data donation.Core) (resp donation.Core, err error) {
 	record := fromCore(data)
 
-	if err := dr.Conn.Joins("description_donations").Where("id = ?", data.ID).Where("description.post_id = ?", data.Description.ID).Updates(&record).Error; err != nil {
-		return donation.Core{}
+	if err := dr.Conn.Model(&Donation{}).Where("id = ?", data.ID).Updates(&record).Error; err != nil {
+		return donation.Core{}, err
 	}
 
-	return donation.Core{}
+	if err := dr.Conn.Model(&DescriptionDonation{}).Where("id = ?", data.ID).Updates(&record.Description).Error; err != nil {
+		return donation.Core{}, err
+	}
+
+	return donation.Core{}, nil
 }
 
 func (dr *mysqlDonationRepository) SelectAllDonations() (resp []donation.Core) {
-	// record := []Donation{}
-	// if err := dr.Conn.Find(&record).Error; err != nil {
-	// 	return []donation.Core{}
-	// }
+
 	var record []Donation
 	if err := dr.Conn.Find(&record).Error; err != nil {
 		return []donation.Core{}
 	}
+
 	return toCoreList(record)
 }
 
@@ -63,7 +68,3 @@ func (dr *mysqlDonationRepository) SelectDonationsById(id int) (resp donation.Co
 	}
 	return toCoreDetail(&record)
 }
-
-// func (dr *mysqlDonationRepository) GetUserById(id int) {
-
-// }

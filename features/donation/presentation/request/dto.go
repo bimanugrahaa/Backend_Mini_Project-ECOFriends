@@ -15,7 +15,6 @@ type Donation struct {
 }
 
 type DonationDescription struct {
-	ID               int    `json:"post_id"`
 	Description      string `json:"desc"`
 	Target_Donation  int    `json:"target_donation"`
 	Current_Donation int    `json:"current_donation"`
@@ -37,7 +36,6 @@ func ToCore(req Donation) donation.Core {
 
 func ToDescriptionCore(req DonationDescription) donation.DescriptionCore {
 	return donation.DescriptionCore{
-		ID:               req.ID,
 		Description:      req.Description,
 		Target_Donation:  req.Target_Donation,
 		Current_Donation: req.Current_Donation,

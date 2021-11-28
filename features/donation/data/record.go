@@ -25,14 +25,6 @@ type DescriptionDonation struct {
 }
 
 //DTO
-// func (dd *DescriptionDonation) toDescriptionCore() donation.DescriptionCore {
-// 	return donation.DescriptionCore{
-// 		ID:               int(dd.ID),
-// 		Description:      dd.Description,
-// 		Target_Donation:  dd.Target_Donation,
-// 		Current_Donation: dd.Current_Donation,
-// 	}
-// }
 
 func toDescriptionCore(dd *DescriptionDonation) donation.DescriptionCore {
 	return donation.DescriptionCore{
@@ -87,15 +79,3 @@ func fromCore(core donation.Core) Donation {
 		Description: fromDescriptionCore(core.Description),
 	}
 }
-
-// func fromCore(core donation.Core) Donation {
-// 	return Donation{
-// 		Title:    core.Title,
-// 		AuthorID: core.AuthorID,
-// 		Description: DescriptionDonation{
-// 			Description:      core.Description.Description,
-// 			Target_Donation:  core.Description.Target_Donation,
-// 			Current_Donation: core.Description.Current_Donation,
-// 		},
-// 	}
-// }

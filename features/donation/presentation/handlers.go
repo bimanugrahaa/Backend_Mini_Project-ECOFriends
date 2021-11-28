@@ -2,7 +2,6 @@ package c_donation
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
-	"Backend_Mini_Project-ECOFriends/features/donation/presentation/request"
 	presentation_request "Backend_Mini_Project-ECOFriends/features/donation/presentation/request"
 	presentation_response "Backend_Mini_Project-ECOFriends/features/donation/presentation/response"
 	"fmt"
@@ -33,8 +32,6 @@ func (dh *DonationHandler) GetAllDonation(c echo.Context) error {
 }
 
 func (dh *DonationHandler) GetDonationsById(c echo.Context) error {
-	// var ids int
-	// idx := c.Param(strconv.Itoa(ids))
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	fmt.Println(id)
@@ -46,9 +43,8 @@ func (dh *DonationHandler) GetDonationsById(c echo.Context) error {
 }
 
 func (dh *DonationHandler) CreateDonation(c echo.Context) error {
-	// var newDonation presentation_request.Donation
 
-	newDonation := request.Donation{}
+	newDonation := presentation_request.Donation{}
 
 	c.Bind(&newDonation)
 
@@ -77,35 +73,17 @@ func (dh *DonationHandler) DeleteDonationsById(c echo.Context) error {
 }
 
 func (dh *DonationHandler) UpdateDonation(c echo.Context) error {
-	// id, _ := strconv.Atoi(c.Param("id"))
-	newDonation := request.Donation{}
+	UpdateDonation := presentation_request.Donation{}
 
-	c.Bind(&newDonation)
+	c.Bind(&UpdateDonation)
 
-	result := dh.donationBussiness.UpdateDonation(presentation_request.ToCore(newDonation))
-	// if result != nil {
-	// 	return c.JSON(http.StatusInternalServerError)
-	// }
+	result, err := dh.donationBussiness.UpdateDonation(presentation_request.ToCore(UpdateDonation))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
 
 	return c.JSON(http.StatusAccepted, map[string]interface{}{
 		"message": "success",
 		"data":    presentation_response.FromCoreDetail(result),
 	})
 }
-
-// func (dh *DonationHandler) CreateDescriptionDonation(c echo.Context) error {
-// 	newDonationDescription := request.DonationDescription{}
-
-// 	c.Bind(newDonationDescription)
-
-// 	resp, err := dh.donationBussiness.CreateDescriptionDonation(presentation_request.ToDescriptionCore(newDonationDescription))
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, err)
-// 	}
-
-// 	return c.JSON(http.StatusAccepted, map[string]interface{}{
-// 		"message": "Donation successfully added.",
-// 		"data":    presentation_response.FromDescriptionDonationCore(resp),
-// 	})
-
-// }
