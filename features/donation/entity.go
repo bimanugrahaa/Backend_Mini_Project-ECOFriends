@@ -43,7 +43,7 @@ type Bussiness interface {
 
 	CreateComment(id int, data CommentCore) (resp CommentCore, err error)
 	GetCommentByPostId(id int) (resp []CommentCore, err error)
-	// UpdateComment
+	UpdateComment(data CommentCore) (resp CommentCore, err error)
 	// DeleteComment
 	//Another CRUD
 }
@@ -58,4 +58,5 @@ type Data interface {
 
 	InsertComment(id int, data CommentCore) (resp CommentCore, err error)
 	SelectCommentByPostId(id int) (resp []CommentCore, err error)
+	EditComment(data CommentCore) (resp CommentCore, err error)
 }

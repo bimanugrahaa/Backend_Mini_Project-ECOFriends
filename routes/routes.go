@@ -22,6 +22,7 @@ func New() *echo.Echo {
 	e.PUT("/donations", presenter.DonationPresentation.UpdateDonation)
 
 	e.POST("/donations/:id/comment", presenter.DonationPresentation.CreateComment)
+	e.PUT("/donations/:id/comment", presenter.DonationPresentation.UpdateComment)
 	//Users
 	e.GET("/users", presenter.UserPresentation.GetAllUser)
 	e.POST("/users", presenter.UserPresentation.CreateUser)

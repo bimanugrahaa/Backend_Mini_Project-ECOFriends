@@ -99,3 +99,13 @@ func (dr *mysqlDonationRepository) SelectCommentByPostId(id int) (resp []donatio
 
 	return toCommentList(record), nil
 }
+
+func (dr *mysqlDonationRepository) EditComment(data donation.CommentCore) (resp donation.CommentCore, err error) {
+	record := fromCommentCore(data.PostID, data)
+
+	if err := dr.Conn.Model(&CommentDonation{}).Where("id = ?", data.ID).Updates(&record).Error; err != nil {
+		return donation.CommentCore{}, err
+	}
+
+	return donation.CommentCore{}, nil
+}

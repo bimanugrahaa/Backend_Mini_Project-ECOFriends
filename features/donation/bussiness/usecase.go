@@ -98,3 +98,13 @@ func (du *donationUsecase) GetCommentByPostId(id int) (resp []donation.CommentCo
 	resp, err = du.donationData.SelectCommentByPostId(id)
 	return
 }
+
+func (du *donationUsecase) UpdateComment(data donation.CommentCore) (resp donation.CommentCore, err error) {
+	resp, err = du.donationData.EditComment(data)
+
+	if err != nil {
+		return donation.CommentCore{}, err
+	}
+
+	return donation.CommentCore{}, nil
+}

@@ -26,6 +26,7 @@ type AuthorDonation struct {
 }
 
 type CommentDonation struct {
+	ID      int    `json:"comment_id"`
 	Comment string `json:"comment"`
 	PostID  int    `json:"post_id"`
 	UserID  int    `json:"user_id"`
@@ -51,6 +52,7 @@ func ToDescriptionCore(req DonationDescription) donation.DescriptionCore {
 
 func ToCommentCore(id int, req CommentDonation) donation.CommentCore {
 	return donation.CommentCore{
+		ID:      req.ID,
 		Comment: req.Comment,
 		PostID:  id,
 		UserID:  req.UserID,
