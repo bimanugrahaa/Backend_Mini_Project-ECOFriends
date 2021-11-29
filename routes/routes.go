@@ -20,11 +20,12 @@ func New() *echo.Echo {
 	e.POST("/donations", presenter.DonationPresentation.CreateDonation)
 	e.DELETE("/donations/:id", presenter.DonationPresentation.DeleteDonationsById)
 	e.PUT("/donations", presenter.DonationPresentation.UpdateDonation)
-	// e.POST("/donations", presenter.DonationPresentation.CreateDescriptionDonation)
 
+	//Users
 	e.GET("/users", presenter.UserPresentation.GetAllUser)
 	e.POST("/users", presenter.UserPresentation.CreateUser)
 	e.PUT("/users", presenter.UserPresentation.UpdateUser)
+	e.DELETE("/users/:id", presenter.UserPresentation.DeleteUser)
 
 	return e
 }

@@ -4,6 +4,7 @@ import (
 	"Backend_Mini_Project-ECOFriends/features/user"
 	user_request "Backend_Mini_Project-ECOFriends/features/user/presentation/request"
 	user_response "Backend_Mini_Project-ECOFriends/features/user/presentation/response"
+	"strconv"
 
 	"net/http"
 
@@ -50,6 +51,18 @@ func (uh *UserHandler) UpdateUser(c echo.Context) error {
 	return c.JSON(http.StatusAccepted, map[string]interface{}{
 		"message": "success",
 		"data":    user_response.FromCore(result),
+	})
+}
+
+func (uh *UserHandler) DeleteUser(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	err := uh.userBussiness.DeleteUser(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "delete user by id success",
 	})
 }
 

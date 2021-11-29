@@ -39,6 +39,17 @@ func (uu *userUsecase) UpdateUser(data user.UserCore) (resp user.UserCore, err e
 	return user.UserCore{}, nil
 }
 
+func (uu *userUsecase) DeleteUser(id int) (err error) {
+
+	err = uu.userData.RemoveUser(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (uu *userUsecase) GetAllUser() (resp []user.UserCore) {
 	resp = uu.userData.SelectAllUser()
 	return
