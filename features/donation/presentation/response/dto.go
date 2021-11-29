@@ -9,30 +9,33 @@ type Donation struct {
 	ID          int                 `json:"id"`
 	Title       string              `json:"title"`
 	Created_at  time.Time           `json:"created_at"`
-	Description DescriptionDonation `json:"desc"`
+	Description DonationDescription `json:"description"`
+	AuthorID    int                 `json:"author_id"`
+	Author      AuthorDonation      `json:"author"`
 }
 
-type DescriptionDonation struct {
+type DonationList struct {
+	ID         int            `json:"id"`
+	Title      string         `json:"title"`
+	Created_at time.Time      `json:"created_at"`
+	AuthorID   int            `json:"author_id"`
+	Author     AuthorDonation `json:"author"`
+}
+
+type DonationDescription struct {
 	ID               int    `json:"post_id"`
 	Description      string `json:"desc"`
 	Target_Donation  int    `json:"target_donation"`
 	Current_Donation int    `json:"current_donation"`
 }
 
-// func FromDescriptionDonationCore(core donation.DescriptionCore) DescriptionDonation {
+type AuthorDonation struct {
+	ID   int    `json:"author_id"`
+	Name string `json:"name"`
+}
 
-// 	return DescriptionDonation{
-// 		ID:               core.ID,
-// 		Description:      core.Description,
-// 		Target_Donation:  core.Target_Donation,
-// 		Current_Donation: core.Current_Donation,
-// 	}
-// }
-
-func FromDescriptionDonationCoreList(resp donation.DescriptionCore) DescriptionDonation {
-	// fmt.Println(resp)
-
-	return DescriptionDonation{
+func FromDescriptionDonationCore(resp donation.DescriptionCore) DonationDescription {
+	return DonationDescription{
 		ID:               resp.ID,
 		Description:      resp.Description,
 		Target_Donation:  resp.Target_Donation,
@@ -40,18 +43,37 @@ func FromDescriptionDonationCoreList(resp donation.DescriptionCore) DescriptionD
 	}
 }
 
-func FromCore(core donation.Core) Donation {
-
-	return Donation{
-		ID:          core.ID,
-		Title:       core.Title,
-		Created_at:  core.Created_at,
-		Description: FromDescriptionDonationCoreList(core.Description),
+func FromUserCore(uc donation.UserCore) AuthorDonation {
+	return AuthorDonation{
+		ID:   uc.ID,
+		Name: uc.Name,
 	}
 }
 
-func FromCoreSlice(core []donation.Core) []Donation {
-	var donationArray []Donation
+func FromCore(core donation.Core) DonationList {
+
+	return DonationList{
+		ID:         core.ID,
+		Title:      core.Title,
+		AuthorID:   core.AuthorID,
+		Author:     FromUserCore(core.Author),
+		Created_at: core.Created_at,
+	}
+}
+
+func FromCoreDetail(core donation.Core) Donation {
+	return Donation{
+		ID:          core.ID,
+		Title:       core.Title,
+		AuthorID:    core.AuthorID,
+		Author:      FromUserCore(core.Author),
+		Created_at:  core.Created_at,
+		Description: FromDescriptionDonationCore(core.Description),
+	}
+}
+
+func FromCoreSlice(core []donation.Core) []DonationList {
+	var donationArray []DonationList
 	for key := range core {
 		donationArray = append(donationArray, FromCore(core[key]))
 	}

@@ -19,10 +19,43 @@ func NewUserBussiness(userData user.Data) user.Bussiness {
 }
 
 func (uu *userUsecase) CreateUser(data user.UserCore) (resp user.UserCore, err error) {
+
+	resp, err = uu.userData.InsertUser(data)
+	if err != nil {
+		return user.UserCore{}, err
+	}
+
 	return user.UserCore{}, nil
 }
 
+func (uu *userUsecase) UpdateUser(data user.UserCore) (resp user.UserCore, err error) {
+
+	resp, err = uu.userData.EditUser(data)
+
+	if err != nil {
+		return user.UserCore{}, err
+	}
+
+	return user.UserCore{}, nil
+}
+
+func (uu *userUsecase) DeleteUser(id int) (err error) {
+
+	err = uu.userData.RemoveUser(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (uu *userUsecase) GetAllUser() (resp []user.UserCore) {
-	resp = uu.userData.SelectData()
+	resp = uu.userData.SelectAllUser()
+	return
+}
+
+func (uu *userUsecase) GetUserById(id int) (resp user.UserCore, err error) {
+	resp, err = uu.userData.SelectUserById(id)
 	return
 }
