@@ -87,3 +87,53 @@ func (dh *DonationHandler) UpdateDonation(c echo.Context) error {
 		"data":    presentation_response.FromCoreDetail(result),
 	})
 }
+
+func (dh *DonationHandler) CreateComment(c echo.Context) error {
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	newComment := presentation_request.CommentDonation{}
+
+	c.Bind(&newComment)
+
+	result, err := dh.donationBussiness.CreateComment(id, presentation_request.ToCommentCore(id, newComment))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		"message": "success",
+		"data":    presentation_response.FromCommentCore(result),
+	})
+}
+
+func (dh *DonationHandler) UpdateComment(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	updateComment := presentation_request.CommentDonation{}
+
+	c.Bind(&updateComment)
+
+	result, err := dh.donationBussiness.UpdateComment(presentation_request.ToCommentCore(id, updateComment))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		"message": "success",
+		"data":    presentation_response.FromCommentCore(result),
+	})
+}
+
+func (dh *DonationHandler) DeleteComment(c echo.Context) error {
+	comment := presentation_request.CommentDonation{}
+
+	c.Bind(&comment)
+	fmt.Println(comment)
+	err := dh.donationBussiness.DeleteComment(comment.ID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "delete comment by id success",
+	})
+}

@@ -21,6 +21,9 @@ func New() *echo.Echo {
 	e.DELETE("/donations/:id", presenter.DonationPresentation.DeleteDonationsById)
 	e.PUT("/donations", presenter.DonationPresentation.UpdateDonation)
 
+	e.POST("/donations/:id/comment", presenter.DonationPresentation.CreateComment)
+	e.PUT("/donations/:id/comment", presenter.DonationPresentation.UpdateComment)
+	e.DELETE("/donations/:id/comment", presenter.DonationPresentation.DeleteComment)
 	//Users
 	e.GET("/users", presenter.UserPresentation.GetAllUser)
 	e.POST("/users", presenter.UserPresentation.CreateUser)
