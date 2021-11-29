@@ -109,11 +109,11 @@ func (dh *DonationHandler) CreateComment(c echo.Context) error {
 
 func (dh *DonationHandler) UpdateComment(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	UpdateComment := presentation_request.CommentDonation{}
+	updateComment := presentation_request.CommentDonation{}
 
-	c.Bind(&UpdateComment)
+	c.Bind(&updateComment)
 
-	result, err := dh.donationBussiness.UpdateComment(presentation_request.ToCommentCore(id, UpdateComment))
+	result, err := dh.donationBussiness.UpdateComment(presentation_request.ToCommentCore(id, updateComment))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
@@ -121,5 +121,19 @@ func (dh *DonationHandler) UpdateComment(c echo.Context) error {
 	return c.JSON(http.StatusAccepted, map[string]interface{}{
 		"message": "success",
 		"data":    presentation_response.FromCommentCore(result),
+	})
+}
+
+func (dh *DonationHandler) DeleteComment(c echo.Context) error {
+	comment := presentation_request.CommentDonation{}
+
+	c.Bind(&comment)
+	fmt.Println(comment)
+	err := dh.donationBussiness.DeleteComment(comment.ID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "delete comment by id success",
 	})
 }

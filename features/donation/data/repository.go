@@ -37,6 +37,9 @@ func (dr *mysqlDonationRepository) RemoveDonationsById(id int) (err error) {
 	if err := dr.Conn.Delete(&Donation{}, id).Error; err != nil {
 		return err
 	}
+	if err := dr.Conn.Where("post_id", id).Delete(&CommentDonation{}).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -93,9 +96,10 @@ func (dr *mysqlDonationRepository) SelectCommentByPostId(id int) (resp []donatio
 	var record []CommentDonation
 
 	// fmt.Println(&resp)
-	if err := dr.Conn.Model(&CommentDonation{}).Find(&record).Error; err != nil {
+	if err := dr.Conn.Model(&CommentDonation{}).Where("post_id = ?", id).Find(&record).Error; err != nil {
 		return []donation.CommentCore{}, err
 	}
+	fmt.Println(record)
 
 	return toCommentList(record), nil
 }
@@ -108,4 +112,12 @@ func (dr *mysqlDonationRepository) EditComment(data donation.CommentCore) (resp 
 	}
 
 	return donation.CommentCore{}, nil
+}
+
+func (dr *mysqlDonationRepository) RemoveComment(id int) (err error) {
+	if err := dr.Conn.Delete(&CommentDonation{}, id).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

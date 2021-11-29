@@ -14,7 +14,7 @@ type Donation struct {
 	DescriptionDonationID int
 	AuthorID              int
 	Description           DescriptionDonation `gorm:"foreignKey:id"`
-	// Comment               []CommentDonation   `gorm:"foreignKey:PostID"`
+	// Comment               []CommentDonation   `gorm:"foreignKey:CommentDonation.PostID"`
 }
 
 type DescriptionDonation struct {

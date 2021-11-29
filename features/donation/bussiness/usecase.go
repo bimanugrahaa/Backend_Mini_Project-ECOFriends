@@ -3,6 +3,7 @@ package bussiness
 import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
 	"Backend_Mini_Project-ECOFriends/features/user"
+	"fmt"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -75,6 +76,9 @@ func (du *donationUsecase) GetDonationsById(id int) (resp donation.Core) {
 	comment, _ := du.donationData.SelectCommentByPostId(id)
 	resp.Author.ID = user.ID
 	resp.Author.Name = user.Name
+
+	fmt.Println(id)
+	fmt.Println(comment)
 	resp.Comment = comment
 	// resp.Comment = append(resp.Comment, )
 
@@ -107,4 +111,14 @@ func (du *donationUsecase) UpdateComment(data donation.CommentCore) (resp donati
 	}
 
 	return donation.CommentCore{}, nil
+}
+
+func (du *donationUsecase) DeleteComment(id int) (err error) {
+	err = du.donationData.RemoveComment(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

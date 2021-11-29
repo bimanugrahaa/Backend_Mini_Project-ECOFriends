@@ -27,11 +27,12 @@ type UserCore struct {
 }
 
 type CommentCore struct {
-	ID      int
-	Comment string
-	PostID  int
-	UserID  int
-	Status  bool
+	ID         int
+	Comment    string
+	PostID     int
+	UserID     int
+	Status     bool
+	Updated_at time.Time
 }
 
 type Bussiness interface {
@@ -44,7 +45,7 @@ type Bussiness interface {
 	CreateComment(id int, data CommentCore) (resp CommentCore, err error)
 	GetCommentByPostId(id int) (resp []CommentCore, err error)
 	UpdateComment(data CommentCore) (resp CommentCore, err error)
-	// DeleteComment
+	DeleteComment(id int) (err error)
 	//Another CRUD
 }
 
@@ -59,4 +60,5 @@ type Data interface {
 	InsertComment(id int, data CommentCore) (resp CommentCore, err error)
 	SelectCommentByPostId(id int) (resp []CommentCore, err error)
 	EditComment(data CommentCore) (resp CommentCore, err error)
+	RemoveComment(id int) (err error)
 }
