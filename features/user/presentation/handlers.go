@@ -2,6 +2,7 @@ package presentation
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/user"
+	user_request "Backend_Mini_Project-ECOFriends/features/user/presentation/request"
 	user_response "Backend_Mini_Project-ECOFriends/features/user/presentation/response"
 
 	"net/http"
@@ -17,6 +18,23 @@ func NewUserHandler(ubu user.Bussiness) *UserHandler {
 	return &UserHandler{
 		userBussiness: ubu,
 	}
+}
+
+func (uh *UserHandler) CreateUser(c echo.Context) error {
+
+	newUser := user_request.User{}
+
+	c.Bind(&newUser)
+
+	result, err := uh.userBussiness.CreateUser(user_request.ToCore(newUser))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		"message": "success",
+		"data":    user_response.FromCore(result),
+	})
 }
 
 func (uh *UserHandler) GetAllUser(c echo.Context) error {

@@ -23,6 +23,7 @@ func New() *echo.Echo {
 	// e.POST("/donations", presenter.DonationPresentation.CreateDescriptionDonation)
 
 	e.GET("/users", presenter.UserPresentation.GetAllUser)
+	e.POST("/users", presenter.UserPresentation.CreateUser)
 
 	return e
 }

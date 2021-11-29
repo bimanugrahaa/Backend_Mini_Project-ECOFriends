@@ -19,6 +19,12 @@ func NewUserBussiness(userData user.Data) user.Bussiness {
 }
 
 func (uu *userUsecase) CreateUser(data user.UserCore) (resp user.UserCore, err error) {
+
+	resp, err = uu.userData.InsertUser(data)
+	if err != nil {
+		return user.UserCore{}, err
+	}
+
 	return user.UserCore{}, nil
 }
 

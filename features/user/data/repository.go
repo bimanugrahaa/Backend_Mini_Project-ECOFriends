@@ -16,7 +16,12 @@ func NewUserRepository(conn *gorm.DB) user.Data {
 	}
 }
 
-func (ur *mysqlUserRepository) InsertData(data user.UserCore) (resp user.UserCore, err error) {
+func (ur *mysqlUserRepository) InsertUser(data user.UserCore) (resp user.UserCore, err error) {
+	record := fromCore(data)
+
+	if err := ur.Conn.Create(&record).Error; err != nil {
+		return user.UserCore{}, err
+	}
 	return user.UserCore{}, nil
 }
 

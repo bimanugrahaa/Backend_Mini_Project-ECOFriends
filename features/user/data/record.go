@@ -34,6 +34,14 @@ func toCoreList(resp []User) []user.UserCore {
 	return u
 }
 
+func fromCore(core user.UserCore) User {
+	return User{
+		Name:     core.Name,
+		Email:    core.Email,
+		Password: core.Password,
+	}
+}
+
 // func toCoreUserId(resp User) user.UserCore {
 
 // }
