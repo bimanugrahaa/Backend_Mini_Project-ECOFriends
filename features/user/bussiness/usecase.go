@@ -28,6 +28,17 @@ func (uu *userUsecase) CreateUser(data user.UserCore) (resp user.UserCore, err e
 	return user.UserCore{}, nil
 }
 
+func (uu *userUsecase) UpdateUser(data user.UserCore) (resp user.UserCore, err error) {
+
+	resp, err = uu.userData.EditUser(data)
+
+	if err != nil {
+		return user.UserCore{}, err
+	}
+
+	return user.UserCore{}, nil
+}
+
 func (uu *userUsecase) GetAllUser() (resp []user.UserCore) {
 	resp = uu.userData.SelectAllUser()
 	return

@@ -37,6 +37,22 @@ func (uh *UserHandler) CreateUser(c echo.Context) error {
 	})
 }
 
+func (uh *UserHandler) UpdateUser(c echo.Context) error {
+	UpdateUser := user_request.User{}
+
+	c.Bind(&UpdateUser)
+
+	result, err := uh.userBussiness.UpdateUser(user_request.ToCore(UpdateUser))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		"message": "success",
+		"data":    user_response.FromCore(result),
+	})
+}
+
 func (uh *UserHandler) GetAllUser(c echo.Context) error {
 	result := uh.userBussiness.GetAllUser()
 	return c.JSON(http.StatusOK, map[string]interface{}{

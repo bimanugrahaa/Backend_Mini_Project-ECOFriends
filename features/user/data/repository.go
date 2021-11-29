@@ -2,6 +2,7 @@ package data
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/user"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -23,6 +24,18 @@ func (ur *mysqlUserRepository) InsertUser(data user.UserCore) (resp user.UserCor
 		return user.UserCore{}, err
 	}
 	return user.UserCore{}, nil
+}
+
+func (ur *mysqlUserRepository) EditUser(data user.UserCore) (resp user.UserCore, err error) {
+	record := fromCore(data)
+
+	fmt.Println(data.ID)
+	if err := ur.Conn.Model(&User{}).Where("id = ?", data.ID).Updates(&record).Error; err != nil {
+		return user.UserCore{}, err
+	}
+
+	return user.UserCore{}, nil
+
 }
 
 func (ur *mysqlUserRepository) SelectAllUser() (resp []user.UserCore) {

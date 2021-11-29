@@ -24,6 +24,7 @@ func New() *echo.Echo {
 
 	e.GET("/users", presenter.UserPresentation.GetAllUser)
 	e.POST("/users", presenter.UserPresentation.CreateUser)
+	e.PUT("/users", presenter.UserPresentation.UpdateUser)
 
 	return e
 }
