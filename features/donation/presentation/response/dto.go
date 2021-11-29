@@ -2,6 +2,7 @@ package response
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
+	"fmt"
 	"time"
 )
 
@@ -12,6 +13,7 @@ type Donation struct {
 	Description DonationDescription `json:"description"`
 	AuthorID    int                 `json:"author_id"`
 	Author      AuthorDonation      `json:"author"`
+	Comment     []CommentDonation   `json:"comment"`
 }
 
 type DonationList struct {
@@ -34,6 +36,14 @@ type AuthorDonation struct {
 	Name string `json:"name"`
 }
 
+type CommentDonation struct {
+	ID      int    `json:"comment_id"`
+	Comment string `json:"comment"`
+	PostID  int    `json:"post_id"`
+	UserID  int    `json:"user_id"`
+	Status  bool   `json:"status"`
+}
+
 func FromDescriptionDonationCore(resp donation.DescriptionCore) DonationDescription {
 	return DonationDescription{
 		ID:               resp.ID,
@@ -47,6 +57,16 @@ func FromUserCore(uc donation.UserCore) AuthorDonation {
 	return AuthorDonation{
 		ID:   uc.ID,
 		Name: uc.Name,
+	}
+}
+
+func FromCommentCore(cc donation.CommentCore) CommentDonation {
+	return CommentDonation{
+		ID:      cc.ID,
+		Comment: cc.Comment,
+		PostID:  cc.PostID,
+		UserID:  cc.UserID,
+		Status:  cc.Status,
 	}
 }
 
@@ -69,7 +89,18 @@ func FromCoreDetail(core donation.Core) Donation {
 		Author:      FromUserCore(core.Author),
 		Created_at:  core.Created_at,
 		Description: FromDescriptionDonationCore(core.Description),
+		Comment:     FromCommentSlice(core.Comment),
 	}
+}
+
+func FromCommentSlice(cc []donation.CommentCore) []CommentDonation {
+	var commentArray []CommentDonation
+	for key := range cc {
+		commentArray = append(commentArray, FromCommentCore(cc[key]))
+	}
+
+	fmt.Println(&commentArray)
+	return commentArray
 }
 
 func FromCoreSlice(core []donation.Core) []DonationList {

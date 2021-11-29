@@ -14,6 +14,7 @@ type Donation struct {
 	DescriptionDonationID int
 	AuthorID              int
 	Description           DescriptionDonation `gorm:"foreignKey:id"`
+	// Comment               []CommentDonation   `gorm:"foreignKey:PostID"`
 }
 
 type DescriptionDonation struct {
@@ -22,6 +23,15 @@ type DescriptionDonation struct {
 	Description      string `gorm:"column:donation_desc"`
 	Target_Donation  int    `gorm:"column:donation_target"`
 	Current_Donation int    `gorm:"column:donation_current"`
+}
+
+type CommentDonation struct {
+	gorm.Model
+	ID      int
+	Comment string `gorm:"column:comment"`
+	PostID  int
+	UserID  int
+	Status  bool `gorm:"default:false"`
 }
 
 //DTO
@@ -35,6 +45,16 @@ func toDescriptionCore(dd *DescriptionDonation) donation.DescriptionCore {
 	}
 }
 
+func toCommentCore(cd *CommentDonation) donation.CommentCore {
+	return donation.CommentCore{
+		ID:      cd.ID,
+		Comment: cd.Comment,
+		PostID:  cd.PostID,
+		UserID:  cd.UserID,
+		Status:  cd.Status,
+	}
+}
+
 func toCore(d *Donation) donation.Core {
 	return donation.Core{
 		ID:         int(d.ID),
@@ -44,19 +64,39 @@ func toCore(d *Donation) donation.Core {
 	}
 }
 
+func toCommentList(resp []CommentDonation) []donation.CommentCore {
+	cc := []donation.CommentCore{}
+
+	for _, value := range resp {
+		cc = append(cc, toCommentCore(&value))
+	}
+
+	return cc
+}
+
 func toCoreDetail(d *Donation) donation.Core {
+	// cc := []donation.CommentCore{}
+
+	// fmt.Println(d.Comment)
+	// for _, value := range d.Comment {
+	// 	cc = append(cc, toCommentCore(&value))
+	// }
+	// fmt.Println(cc)
+
 	return donation.Core{
 		ID:          int(d.ID),
 		Title:       d.Title,
 		AuthorID:    d.AuthorID,
 		Created_at:  d.CreatedAt,
 		Description: toDescriptionCore(&d.Description),
+		// Comment:     cc,
 	}
 }
 
 func toCoreList(resp []Donation) []donation.Core {
 	d := []donation.Core{}
 
+	// fmt.Println("d", resp)
 	for _, value := range resp {
 		d = append(d, toCore(&value))
 	}
@@ -69,6 +109,15 @@ func fromDescriptionCore(dc donation.DescriptionCore) DescriptionDonation {
 		Description:      dc.Description,
 		Target_Donation:  dc.Target_Donation,
 		Current_Donation: dc.Current_Donation,
+	}
+}
+
+func fromCommentCore(id int, cc donation.CommentCore) CommentDonation {
+	return CommentDonation{
+		Comment: cc.Comment,
+		PostID:  id,
+		UserID:  cc.UserID,
+		Status:  cc.Status,
 	}
 }
 

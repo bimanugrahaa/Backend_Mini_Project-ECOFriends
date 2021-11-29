@@ -87,3 +87,22 @@ func (dh *DonationHandler) UpdateDonation(c echo.Context) error {
 		"data":    presentation_response.FromCoreDetail(result),
 	})
 }
+
+func (dh *DonationHandler) CreateComment(c echo.Context) error {
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	newComment := presentation_request.CommentDonation{}
+
+	c.Bind(&newComment)
+
+	result, err := dh.donationBussiness.CreateComment(id, presentation_request.ToCommentCore(id, newComment))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		"message": "success",
+		"data":    presentation_response.FromCommentCore(result),
+	})
+}

@@ -57,7 +57,8 @@ func (dr *mysqlDonationRepository) EditDonation(data donation.Core) (resp donati
 func (dr *mysqlDonationRepository) SelectAllDonations() (resp []donation.Core) {
 
 	var record []Donation
-	if err := dr.Conn.Find(&record).Error; err != nil {
+
+	if err := dr.Conn.Model(&Donation{}).Find(&record).Error; err != nil {
 		return []donation.Core{}
 	}
 
@@ -66,8 +67,35 @@ func (dr *mysqlDonationRepository) SelectAllDonations() (resp []donation.Core) {
 
 func (dr *mysqlDonationRepository) SelectDonationsById(id int) (resp donation.Core) {
 	var record Donation
-	if err := dr.Conn.Preload("Description").First(&record, id).Error; err != nil {
+
+	if err := dr.Conn.First(&record, id).Error; err != nil {
 		return donation.Core{}
 	}
+
 	return toCoreDetail(&record)
+}
+
+func (dr *mysqlDonationRepository) InsertComment(id int, data donation.CommentCore) (resp donation.CommentCore, err error) {
+
+	record := fromCommentCore(id, data)
+	fmt.Println("record", record)
+	if err := dr.Conn.Model(&CommentDonation{}).Create(&record).Error; err != nil {
+
+		return donation.CommentCore{}, err
+	}
+
+	fmt.Println(dr.Conn.Create(&record))
+	return donation.CommentCore{}, nil
+}
+
+func (dr *mysqlDonationRepository) SelectCommentByPostId(id int) (resp []donation.CommentCore, err error) {
+
+	var record []CommentDonation
+
+	// fmt.Println(&resp)
+	if err := dr.Conn.Model(&CommentDonation{}).Find(&record).Error; err != nil {
+		return []donation.CommentCore{}, err
+	}
+
+	return toCommentList(record), nil
 }

@@ -10,6 +10,7 @@ type Core struct {
 	AuthorID    int
 	Author      UserCore
 	Description DescriptionCore
+	Comment     []CommentCore
 	Created_at  time.Time
 }
 
@@ -25,12 +26,25 @@ type UserCore struct {
 	Name string
 }
 
+type CommentCore struct {
+	ID      int
+	Comment string
+	PostID  int
+	UserID  int
+	Status  bool
+}
+
 type Bussiness interface {
 	CreateDonation(data Core) (resp Core, err error)
 	GetAllDonations() (resp []Core)
 	GetDonationsById(id int) (resp Core)
 	DeleteDonationsById(id int) (err error)
 	UpdateDonation(data Core) (resp Core, err error)
+
+	CreateComment(id int, data CommentCore) (resp CommentCore, err error)
+	GetCommentByPostId(id int) (resp []CommentCore, err error)
+	// UpdateComment
+	// DeleteComment
 	//Another CRUD
 }
 
@@ -41,4 +55,7 @@ type Data interface {
 	SelectDonationsById(id int) (resp Core)
 	RemoveDonationsById(id int) (err error)
 	EditDonation(data Core) (resp Core, err error)
+
+	InsertComment(id int, data CommentCore) (resp CommentCore, err error)
+	SelectCommentByPostId(id int) (resp []CommentCore, err error)
 }

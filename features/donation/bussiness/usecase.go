@@ -62,7 +62,7 @@ func (du *donationUsecase) GetAllDonations() (resp []donation.Core) {
 		user, _ := du.userData.GetUserById(value.AuthorID)
 		resp[key].Author.ID = user.ID
 		resp[key].Author.Name = user.Name
-
+		// fmt.Println("resp", resp[key].Comment)
 	}
 
 	return
@@ -72,8 +72,29 @@ func (du *donationUsecase) GetDonationsById(id int) (resp donation.Core) {
 	resp = du.donationData.SelectDonationsById(id)
 
 	user, _ := du.userData.GetUserById(resp.AuthorID)
+	comment, _ := du.donationData.SelectCommentByPostId(id)
 	resp.Author.ID = user.ID
 	resp.Author.Name = user.Name
+	resp.Comment = comment
+	// resp.Comment = append(resp.Comment, )
 
+	return
+}
+
+func (du *donationUsecase) CreateComment(id int, data donation.CommentCore) (resp donation.CommentCore, err error) {
+	// if err := du.validate.Struct(data); err != nil {
+	// 	return donation.Core{}, err
+	// }
+
+	resp, err = du.donationData.InsertComment(id, data)
+	if err != nil {
+		return donation.CommentCore{}, err
+	}
+
+	return donation.CommentCore{}, nil
+}
+
+func (du *donationUsecase) GetCommentByPostId(id int) (resp []donation.CommentCore, err error) {
+	resp, err = du.donationData.SelectCommentByPostId(id)
 	return
 }
