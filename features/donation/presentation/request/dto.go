@@ -29,7 +29,7 @@ func ToCore(req Donation) donation.Core {
 	return donation.Core{
 		ID:          req.ID,
 		Title:       req.Title,
-		AuthorID:    1,
+		AuthorID:    req.AuthorID,
 		Description: ToDescriptionCore(req.Description),
 	}
 }
