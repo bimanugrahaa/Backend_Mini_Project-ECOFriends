@@ -10,6 +10,7 @@ type User struct {
 	Name       string    `json:"name"`
 	Email      string    `json:"email"`
 	Password   string    `json:"password"`
+	Token      string    `json:"token"`
 	Created_at time.Time `json:"created_at"`
 }
 
@@ -19,6 +20,7 @@ func FromCore(core user.UserCore) User {
 		Name:       core.Name,
 		Email:      core.Email,
 		Password:   core.Password,
+		Token:      core.Token,
 		Created_at: core.Created_at,
 	}
 }

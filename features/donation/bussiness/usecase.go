@@ -28,11 +28,15 @@ func (du *donationUsecase) CreateDonation(data donation.Core) (resp donation.Cor
 	// }
 
 	resp, err = du.donationData.InsertDonation(data)
+	// fmt.Println("resp", resp)
+	user, _ := du.userData.GetUserById(resp.AuthorID)
+	resp.Author.ID = user.ID
+	resp.Author.Name = user.Name
 	if err != nil {
 		return donation.Core{}, err
 	}
 
-	return donation.Core{}, nil
+	return resp, nil
 }
 
 func (du *donationUsecase) DeleteDonationsById(id int) (err error) {
@@ -53,7 +57,7 @@ func (du *donationUsecase) UpdateDonation(data donation.Core) (resp donation.Cor
 		return donation.Core{}, err
 	}
 
-	return donation.Core{}, nil
+	return data, nil
 }
 
 func (du *donationUsecase) GetAllDonations() (resp []donation.Core) {

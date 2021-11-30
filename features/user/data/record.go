@@ -11,6 +11,7 @@ type User struct {
 	Name     string
 	Email    string
 	Password string
+	Token    string
 }
 
 func toCore(u *User) user.UserCore {
@@ -19,6 +20,7 @@ func toCore(u *User) user.UserCore {
 		Name:       u.Name,
 		Email:      u.Email,
 		Password:   u.Password,
+		Token:      u.Token,
 		Created_at: u.CreatedAt,
 	}
 }

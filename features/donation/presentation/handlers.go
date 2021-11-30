@@ -4,6 +4,7 @@ import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
 	presentation_request "Backend_Mini_Project-ECOFriends/features/donation/presentation/request"
 	presentation_response "Backend_Mini_Project-ECOFriends/features/donation/presentation/response"
+	"Backend_Mini_Project-ECOFriends/middleware"
 	"fmt"
 	"strconv"
 
@@ -24,6 +25,9 @@ func NewDonationHandler(dbu donation.Bussiness) *DonationHandler {
 
 func (dh *DonationHandler) GetAllDonation(c echo.Context) error {
 	result := dh.donationBussiness.GetAllDonations()
+	claim := middleware.ExtractTokenUserId(c)
+	fmt.Println(claim)
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		// "claims":  middleware.ExtractClaim(c),
 		"message": "Success",
@@ -48,11 +52,13 @@ func (dh *DonationHandler) CreateDonation(c echo.Context) error {
 
 	c.Bind(&newDonation)
 
+	fmt.Println("present", newDonation)
 	result, err := dh.donationBussiness.CreateDonation(presentation_request.ToCore(newDonation))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
+	fmt.Println("present resp", presentation_response.FromCoreDetail(result))
 	return c.JSON(http.StatusAccepted, map[string]interface{}{
 		"message": "success",
 		"data":    presentation_response.FromCoreDetail(result),

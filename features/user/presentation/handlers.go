@@ -68,6 +68,7 @@ func (uh *UserHandler) DeleteUser(c echo.Context) error {
 
 func (uh *UserHandler) GetAllUser(c echo.Context) error {
 	result := uh.userBussiness.GetAllUser()
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		// "claims":  middleware.ExtractClaim(c),
 		"message": "Success",
@@ -75,6 +76,20 @@ func (uh *UserHandler) GetAllUser(c echo.Context) error {
 	})
 }
 
-// func (uh *UserHandler)  {
+func (uh *UserHandler) Login(c echo.Context) error {
+	infoUser := user_request.User{}
 
-// }
+	c.Bind(&infoUser)
+
+	// fmt.Println(middleware.ExtractTokenUserId(c))
+	result, err := uh.userBussiness.Login(user_request.ToCore(infoUser))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		// "claims":  middleware.ExtractTokenUserId(c),
+		"message": "success",
+		"data":    user_response.FromCore(result),
+	})
+}

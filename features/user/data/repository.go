@@ -2,6 +2,8 @@ package data
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/user"
+	"Backend_Mini_Project-ECOFriends/middleware"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -59,5 +61,27 @@ func (ur *mysqlUserRepository) SelectUserById(id int) (resp user.UserCore, err e
 		return user.UserCore{}, err
 	}
 
+	return toCore(&record), err
+}
+
+func (ur *mysqlUserRepository) Login(data user.UserCore) (resp user.UserCore, err error) {
+
+	record := fromCore(data)
+
+	if err := ur.Conn.Model(&User{}).Where("email = ? AND password = ?", data.Email, data.Password).First(&record).Error; err != nil {
+		return user.UserCore{}, err
+	}
+	fmt.Println(record)
+	data.Token, err = middleware.CreateToken(int(record.ID))
+	fmt.Println(data.Token)
+	if err != nil {
+		return user.UserCore{}, err
+	}
+
+	if err := ur.Conn.Save(&record).Error; err != nil {
+		return user.UserCore{}, err
+	}
+
+	fmt.Println(record)
 	return toCore(&record), err
 }
