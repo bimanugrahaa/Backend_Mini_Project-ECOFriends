@@ -28,10 +28,10 @@ func (du *donationUsecase) CreateDonation(data donation.Core) (resp donation.Cor
 	// }
 
 	resp, err = du.donationData.InsertDonation(data)
-	// fmt.Println("resp", resp)
 	user, _ := du.userData.GetUserById(resp.AuthorID)
 	resp.Author.ID = user.ID
 	resp.Author.Name = user.Name
+
 	if err != nil {
 		return donation.Core{}, err
 	}
@@ -39,9 +39,12 @@ func (du *donationUsecase) CreateDonation(data donation.Core) (resp donation.Cor
 	return resp, nil
 }
 
-func (du *donationUsecase) DeleteDonationsById(id int) (err error) {
+func (du *donationUsecase) DeleteDonationsById(id int, data donation.Core) (err error) {
 
-	err = du.donationData.RemoveDonationsById(id)
+	// resp := du.GetDonationsById(id)
+	resp := du.donationData.SelectDonationsById(data.ID)
+	fmt.Println("resp", resp)
+	err = du.donationData.RemoveDonationsById(id, resp)
 
 	if err != nil {
 		return err
@@ -52,12 +55,15 @@ func (du *donationUsecase) DeleteDonationsById(id int) (err error) {
 
 func (du *donationUsecase) UpdateDonation(data donation.Core) (resp donation.Core, err error) {
 	resp, err = du.donationData.EditDonation(data)
+	user, _ := du.userData.GetUserById(resp.AuthorID)
+	resp.Author.ID = user.ID
+	resp.Author.Name = user.Name
 
 	if err != nil {
 		return donation.Core{}, err
 	}
 
-	return data, nil
+	return resp, nil
 }
 
 func (du *donationUsecase) GetAllDonations() (resp []donation.Core) {
@@ -67,7 +73,6 @@ func (du *donationUsecase) GetAllDonations() (resp []donation.Core) {
 		user, _ := du.userData.GetUserById(value.AuthorID)
 		resp[key].Author.ID = user.ID
 		resp[key].Author.Name = user.Name
-		// fmt.Println("resp", resp[key].Comment)
 	}
 
 	return
@@ -80,11 +85,7 @@ func (du *donationUsecase) GetDonationsById(id int) (resp donation.Core) {
 	comment, _ := du.donationData.SelectCommentByPostId(id)
 	resp.Author.ID = user.ID
 	resp.Author.Name = user.Name
-
-	fmt.Println(id)
-	fmt.Println(comment)
 	resp.Comment = comment
-	// resp.Comment = append(resp.Comment, )
 
 	return
 }
@@ -99,7 +100,7 @@ func (du *donationUsecase) CreateComment(id int, data donation.CommentCore) (res
 		return donation.CommentCore{}, err
 	}
 
-	return donation.CommentCore{}, nil
+	return resp, nil
 }
 
 func (du *donationUsecase) GetCommentByPostId(id int) (resp []donation.CommentCore, err error) {
@@ -114,7 +115,7 @@ func (du *donationUsecase) UpdateComment(data donation.CommentCore) (resp donati
 		return donation.CommentCore{}, err
 	}
 
-	return donation.CommentCore{}, nil
+	return resp, nil
 }
 
 func (du *donationUsecase) DeleteComment(id int) (err error) {

@@ -44,6 +44,13 @@ type CommentDonation struct {
 	Status  bool   `json:"status"`
 }
 
+type CommentUpdateDonation struct {
+	ID      int    `json:"comment_id"`
+	Comment string `json:"comment"`
+	PostID  int    `json:"post_id"`
+	Status  bool   `json:"status"`
+}
+
 func FromDescriptionDonationCore(resp donation.DescriptionCore) DonationDescription {
 	return DonationDescription{
 		ID:               resp.ID,
@@ -66,6 +73,15 @@ func FromCommentCore(cc donation.CommentCore) CommentDonation {
 		Comment: cc.Comment,
 		PostID:  cc.PostID,
 		UserID:  cc.UserID,
+		Status:  cc.Status,
+	}
+}
+
+func FromCommentUpdateCore(cc donation.CommentCore) CommentUpdateDonation {
+	return CommentUpdateDonation{
+		ID:      cc.ID,
+		Comment: cc.Comment,
+		PostID:  cc.PostID,
 		Status:  cc.Status,
 	}
 }

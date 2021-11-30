@@ -39,7 +39,7 @@ type Bussiness interface {
 	CreateDonation(data Core) (resp Core, err error)
 	GetAllDonations() (resp []Core)
 	GetDonationsById(id int) (resp Core)
-	DeleteDonationsById(id int) (err error)
+	DeleteDonationsById(id int, data Core) (err error)
 	UpdateDonation(data Core) (resp Core, err error)
 
 	CreateComment(id int, data CommentCore) (resp CommentCore, err error)
@@ -54,7 +54,7 @@ type Data interface {
 	InsertDonation(data Core) (resp Core, err error)
 	SelectAllDonations() (resp []Core)
 	SelectDonationsById(id int) (resp Core)
-	RemoveDonationsById(id int) (err error)
+	RemoveDonationsById(id int, data Core) (err error)
 	EditDonation(data Core) (resp Core, err error)
 
 	InsertComment(id int, data CommentCore) (resp CommentCore, err error)

@@ -25,11 +25,8 @@ func NewDonationHandler(dbu donation.Bussiness) *DonationHandler {
 
 func (dh *DonationHandler) GetAllDonation(c echo.Context) error {
 	result := dh.donationBussiness.GetAllDonations()
-	claim := middleware.ExtractTokenUserId(c)
-	fmt.Println(claim)
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		// "claims":  middleware.ExtractClaim(c),
 		"message": "Success",
 		"data":    presentation_response.FromCoreSlice(result),
 	})
@@ -38,7 +35,6 @@ func (dh *DonationHandler) GetAllDonation(c echo.Context) error {
 func (dh *DonationHandler) GetDonationsById(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	fmt.Println(id)
 	result := dh.donationBussiness.GetDonationsById(id)
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success",
@@ -48,11 +44,15 @@ func (dh *DonationHandler) GetDonationsById(c echo.Context) error {
 
 func (dh *DonationHandler) CreateDonation(c echo.Context) error {
 
+	claim := middleware.ExtractTokenUserId(c)
+	user_id := int(claim["user_id"].(float64))
 	newDonation := presentation_request.Donation{}
+
+	newDonation.AuthorID = user_id
+	newDonation.Author.ID = user_id
 
 	c.Bind(&newDonation)
 
-	fmt.Println("present", newDonation)
 	result, err := dh.donationBussiness.CreateDonation(presentation_request.ToCore(newDonation))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
@@ -68,11 +68,17 @@ func (dh *DonationHandler) CreateDonation(c echo.Context) error {
 func (dh *DonationHandler) DeleteDonationsById(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	fmt.Println(id)
-	err := dh.donationBussiness.DeleteDonationsById(id)
+	claim := middleware.ExtractTokenUserId(c)
+	user_id := int(claim["user_id"].(float64))
+	fmt.Println(donation.Core{ID: id})
+	err := dh.donationBussiness.DeleteDonationsById(user_id, donation.Core{ID: id})
+
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
+		return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+			"message": http.StatusUnauthorized,
+		})
 	}
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "delete donation by id success",
 	})
@@ -126,7 +132,7 @@ func (dh *DonationHandler) UpdateComment(c echo.Context) error {
 
 	return c.JSON(http.StatusAccepted, map[string]interface{}{
 		"message": "success",
-		"data":    presentation_response.FromCommentCore(result),
+		"data":    presentation_response.FromCommentUpdateCore(result),
 	})
 }
 

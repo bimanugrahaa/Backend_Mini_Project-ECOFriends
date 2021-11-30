@@ -10,6 +10,7 @@ import (
 
 type Donation struct {
 	gorm.Model
+	ID                    int
 	Title                 string `gorm:"column:donation_title"`
 	DescriptionDonationID int
 	AuthorID              int
@@ -75,28 +76,18 @@ func toCommentList(resp []CommentDonation) []donation.CommentCore {
 }
 
 func toCoreDetail(d *Donation) donation.Core {
-	// cc := []donation.CommentCore{}
-
-	// fmt.Println(d.Comment)
-	// for _, value := range d.Comment {
-	// 	cc = append(cc, toCommentCore(&value))
-	// }
-	// fmt.Println(cc)
-
 	return donation.Core{
 		ID:          int(d.ID),
 		Title:       d.Title,
 		AuthorID:    d.AuthorID,
 		Created_at:  d.CreatedAt,
 		Description: toDescriptionCore(&d.Description),
-		// Comment:     cc,
 	}
 }
 
 func toCoreList(resp []Donation) []donation.Core {
 	d := []donation.Core{}
 
-	// fmt.Println("d", resp)
 	for _, value := range resp {
 		d = append(d, toCore(&value))
 	}
@@ -106,6 +97,7 @@ func toCoreList(resp []Donation) []donation.Core {
 
 func fromDescriptionCore(dc donation.DescriptionCore) DescriptionDonation {
 	return DescriptionDonation{
+		ID:               dc.ID,
 		Description:      dc.Description,
 		Target_Donation:  dc.Target_Donation,
 		Current_Donation: dc.Current_Donation,
@@ -123,6 +115,7 @@ func fromCommentCore(id int, cc donation.CommentCore) CommentDonation {
 
 func fromCore(core donation.Core) Donation {
 	return Donation{
+		ID:          core.ID,
 		Title:       core.Title,
 		AuthorID:    core.AuthorID,
 		Description: fromDescriptionCore(core.Description),
