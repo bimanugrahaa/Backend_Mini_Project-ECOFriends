@@ -12,7 +12,7 @@ func CreateToken(id int) (string, error) {
 	claims := jwt.MapClaims{
 		"authorized": true,
 		"id":         id,
-		"exp":        time.Now().Add(time.Hour * 12).Unix(),
+		"exp":        time.Now().Add(time.Minute * 1).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -29,3 +29,7 @@ func ExtractTokenUserId(e echo.Context) (claims map[string]interface{}) {
 
 	return
 }
+
+// func ExtractClaim(e echo.Context) (claims map[string]interface{}) {
+// 	userId := e.Get("id")
+// }

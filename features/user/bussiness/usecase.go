@@ -59,3 +59,20 @@ func (uu *userUsecase) GetUserById(id int) (resp user.UserCore, err error) {
 	resp, err = uu.userData.SelectUserById(id)
 	return
 }
+
+func (uu *userUsecase) Login(data user.UserCore) (resp user.UserCore, err error) {
+	resp, err = uu.userData.Login(data)
+
+	// token := ""
+
+	if err != nil {
+		return user.UserCore{}, err
+	}
+
+	// token, err = middleware.CreateToken(data.ID)
+	// if err != nil {
+	// 	return user.UserCore{}, err
+	// }
+
+	return user.UserCore{}, nil
+}

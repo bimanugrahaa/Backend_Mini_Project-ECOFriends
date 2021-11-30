@@ -75,6 +75,18 @@ func (uh *UserHandler) GetAllUser(c echo.Context) error {
 	})
 }
 
-// func (uh *UserHandler)  {
+func (uh *UserHandler) Login(c echo.Context) error {
+	infoUser := user_request.User{}
 
-// }
+	c.Bind(&infoUser)
+
+	result, err := uh.userBussiness.Login(user_request.ToCore(infoUser))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusAccepted, map[string]interface{}{
+		"message": "success",
+		"data":    user_response.FromCore(result),
+	})
+}

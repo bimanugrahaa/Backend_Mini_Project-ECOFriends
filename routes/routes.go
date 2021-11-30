@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"Backend_Mini_Project-ECOFriends/config"
 	"Backend_Mini_Project-ECOFriends/factory"
 
 	"github.com/labstack/echo/v4"
@@ -13,6 +14,8 @@ func New() *echo.Echo {
 
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
+	auth := e.Group("")
+	auth.Use(middleware.JWT([]byte(config.JwtSecret)))
 
 	//Donations
 	e.GET("/donations", presenter.DonationPresentation.GetAllDonation)
@@ -20,6 +23,19 @@ func New() *echo.Echo {
 	e.POST("/donations", presenter.DonationPresentation.CreateDonation)
 	e.DELETE("/donations/:id", presenter.DonationPresentation.DeleteDonationsById)
 	e.PUT("/donations", presenter.DonationPresentation.UpdateDonation)
+
+	e.POST("/login", presenter.UserPresentation.Login)
+
+	// e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+	// 	SigningMethod: jwt.SigningMethodHS256.Name,
+	// 	SigningKey:    []byte(config.JwtSecret),
+	// 	ErrorHandlerWithContext: func(e error, c echo.Context) error {
+	// 		return c.JSON(http.StatusForbidden, map[string]interface{}{
+	// 			"status":  "error login",
+	// 			"message": e,
+	// 		})
+	// 	},
+	// }))
 
 	e.POST("/donations/:id/comment", presenter.DonationPresentation.CreateComment)
 	e.PUT("/donations/:id/comment", presenter.DonationPresentation.UpdateComment)
