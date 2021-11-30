@@ -78,5 +78,10 @@ func (ur *mysqlUserRepository) Login(data user.UserCore) (resp user.UserCore, er
 		return user.UserCore{}, err
 	}
 
+	if err := ur.Conn.Save(&record).Error; err != nil {
+		return user.UserCore{}, err
+	}
+
+	fmt.Println(record)
 	return toCore(&record), err
 }

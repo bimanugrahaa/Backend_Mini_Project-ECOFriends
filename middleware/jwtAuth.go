@@ -11,8 +11,8 @@ import (
 func CreateToken(id int) (string, error) {
 	claims := jwt.MapClaims{
 		"authorized": true,
-		"id":         id,
-		"exp":        time.Now().Add(time.Minute * 1).Unix(),
+		"user_id":    id,
+		"exp":        time.Now().Add(time.Hour * 1).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -21,15 +21,11 @@ func CreateToken(id int) (string, error) {
 }
 
 func ExtractTokenUserId(e echo.Context) (claims map[string]interface{}) {
-	user := e.Get("user").(*jwt.Token)
 
-	if user.Valid {
-		claims = user.Claims.(jwt.MapClaims)
+	if user := e.Get("user"); user != nil {
+		u := user.(*jwt.Token)
+		claims = u.Claims.(jwt.MapClaims)
 	}
 
 	return
 }
-
-// func ExtractClaim(e echo.Context) (claims map[string]interface{}) {
-// 	userId := e.Get("id")
-// }

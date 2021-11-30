@@ -20,14 +20,14 @@ func NewDonationRepository(conn *gorm.DB) donation.Data {
 func (dr *mysqlDonationRepository) InsertDonation(data donation.Core) (resp donation.Core, err error) {
 
 	record := fromCore(data)
-	fmt.Println("record", record)
+	// fmt.Println("record", record)
 	if err := dr.Conn.Create(&record).Error; err != nil {
 
 		return donation.Core{}, err
 	}
 
-	fmt.Println(dr.Conn.Create(&record))
-	return donation.Core{}, nil
+	// fmt.Println(donation.Core{})
+	return toCoreDetail(&record), nil
 }
 
 func (dr *mysqlDonationRepository) RemoveDonationsById(id int) (err error) {
