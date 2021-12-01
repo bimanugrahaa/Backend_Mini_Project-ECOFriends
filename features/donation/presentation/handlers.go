@@ -5,7 +5,6 @@ import (
 	presentation_request "Backend_Mini_Project-ECOFriends/features/donation/presentation/request"
 	presentation_response "Backend_Mini_Project-ECOFriends/features/donation/presentation/response"
 	"Backend_Mini_Project-ECOFriends/middleware"
-	"fmt"
 	"strconv"
 
 	"net/http"
@@ -76,7 +75,6 @@ func (dh *DonationHandler) CreateDonation(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	fmt.Println("present resp", presentation_response.FromCoreDetail(result))
 	return c.JSON(http.StatusAccepted, map[string]interface{}{
 		"message": "success",
 		"data":    presentation_response.FromCoreDetail(result),

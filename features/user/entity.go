@@ -27,6 +27,7 @@ type Data interface {
 	InsertUser(data UserCore) (resp UserCore, err error)
 	SelectAllUser() (resp []UserCore)
 	SelectUserById(id int) (resp UserCore, err error)
+	SelectUserEmail(data UserCore) (resp UserCore, err error)
 	EditUser(data UserCore) (resp UserCore, err error)
 	RemoveUser(id int) (err error)
 

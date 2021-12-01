@@ -46,9 +46,9 @@ func New() *echo.Echo {
 	//Users
 	e.POST("/login", presenter.UserPresentation.Login)
 	e.GET("/users", presenter.UserPresentation.GetAllUser)
-	e.POST("/users", presenter.UserPresentation.CreateUser)
+	e.POST("/register", presenter.UserPresentation.CreateUser)
 	auth.PUT("/users", presenter.UserPresentation.UpdateUser)
-	auth.DELETE("/users/:id", presenter.UserPresentation.DeleteUser)
+	auth.DELETE("/users", presenter.UserPresentation.DeleteUser)
 
 	return e
 }
