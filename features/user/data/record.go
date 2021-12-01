@@ -28,8 +28,6 @@ func toCore(u *User) user.UserCore {
 func toCoreList(resp []User) []user.UserCore {
 	u := []user.UserCore{}
 	for _, value := range resp {
-		// u[key] = toCore(&value)
-		// u = append(u, resp[key].toCore())
 		u = append(u, toCore(&value))
 	}
 
@@ -43,7 +41,3 @@ func fromCore(core user.UserCore) User {
 		Password: core.Password,
 	}
 }
-
-// func toCoreUserId(resp User) user.UserCore {
-
-// }

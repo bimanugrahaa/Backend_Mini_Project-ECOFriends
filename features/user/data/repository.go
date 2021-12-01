@@ -24,7 +24,7 @@ func (ur *mysqlUserRepository) InsertUser(data user.UserCore) (resp user.UserCor
 	if err := ur.Conn.Create(&record).Error; err != nil {
 		return user.UserCore{}, err
 	}
-	return user.UserCore{}, nil
+	return toCore(&record), nil
 }
 
 func (ur *mysqlUserRepository) EditUser(data user.UserCore) (resp user.UserCore, err error) {
@@ -34,7 +34,7 @@ func (ur *mysqlUserRepository) EditUser(data user.UserCore) (resp user.UserCore,
 		return user.UserCore{}, err
 	}
 
-	return user.UserCore{}, nil
+	return toCore(&record), nil
 
 }
 
@@ -64,6 +64,16 @@ func (ur *mysqlUserRepository) SelectUserById(id int) (resp user.UserCore, err e
 	return toCore(&record), err
 }
 
+func (ur *mysqlUserRepository) SelectUserEmail(data user.UserCore) (resp user.UserCore, err error) {
+	record := fromCore(data)
+
+	if err := ur.Conn.Model(&User{}).Where("email = ?", data.Email).First(&record).Error; err != nil {
+		return user.UserCore{}, err
+	}
+
+	return toCore(&record), err
+}
+
 func (ur *mysqlUserRepository) Login(data user.UserCore) (resp user.UserCore, err error) {
 
 	record := fromCore(data)
@@ -71,17 +81,17 @@ func (ur *mysqlUserRepository) Login(data user.UserCore) (resp user.UserCore, er
 	if err := ur.Conn.Model(&User{}).Where("email = ? AND password = ?", data.Email, data.Password).First(&record).Error; err != nil {
 		return user.UserCore{}, err
 	}
-	fmt.Println(record)
-	data.Token, err = middleware.CreateToken(int(record.ID))
-	fmt.Println(data.Token)
+
+	record.Token, _ = middleware.CreateToken(int(record.ID))
+
 	if err != nil {
 		return user.UserCore{}, err
 	}
 
-	if err := ur.Conn.Save(&record).Error; err != nil {
+	if err := ur.Conn.Model(&User{}).Where("id = ?", data.ID).Updates(&record).Error; err != nil {
 		return user.UserCore{}, err
 	}
 
-	fmt.Println(record)
+	fmt.Println(record.Token)
 	return toCore(&record), err
 }
