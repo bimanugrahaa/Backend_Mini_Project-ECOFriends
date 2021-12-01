@@ -15,15 +15,15 @@ type Donation struct {
 	DescriptionDonationID int
 	AuthorID              int
 	Description           DescriptionDonation `gorm:"foreignKey:id"`
-	// Comment               []CommentDonation   `gorm:"foreignKey:CommentDonation.PostID"`
 }
 
 type DescriptionDonation struct {
 	gorm.Model
-	ID               int
-	Description      string `gorm:"column:donation_desc"`
-	Target_Donation  int    `gorm:"column:donation_target"`
-	Current_Donation int    `gorm:"column:donation_current"`
+	ID                  int
+	Description         string  `gorm:"column:donation_desc"`
+	Target_Donation     int     `gorm:"column:donation_target"`
+	Current_Donation    int     `gorm:"column:donation_current"`
+	Percentage_Donation float64 `gorm:"column:donation_percentage"`
 }
 
 type CommentDonation struct {
@@ -39,10 +39,11 @@ type CommentDonation struct {
 
 func toDescriptionCore(dd *DescriptionDonation) donation.DescriptionCore {
 	return donation.DescriptionCore{
-		ID:               dd.ID,
-		Description:      dd.Description,
-		Target_Donation:  dd.Target_Donation,
-		Current_Donation: dd.Current_Donation,
+		ID:                  dd.ID,
+		Description:         dd.Description,
+		Target_Donation:     dd.Target_Donation,
+		Current_Donation:    dd.Current_Donation,
+		Percentage_Donation: dd.Percentage_Donation,
 	}
 }
 
@@ -97,10 +98,11 @@ func toCoreList(resp []Donation) []donation.Core {
 
 func fromDescriptionCore(dc donation.DescriptionCore) DescriptionDonation {
 	return DescriptionDonation{
-		ID:               dc.ID,
-		Description:      dc.Description,
-		Target_Donation:  dc.Target_Donation,
-		Current_Donation: dc.Current_Donation,
+		ID:                  dc.ID,
+		Description:         dc.Description,
+		Target_Donation:     dc.Target_Donation,
+		Current_Donation:    dc.Current_Donation,
+		Percentage_Donation: dc.Percentage_Donation,
 	}
 }
 

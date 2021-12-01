@@ -27,14 +27,16 @@ func New() *echo.Echo {
 			})
 		},
 	}))
-	// auth.Use(middleware.JWT([]byte(config.JwtSecret)))
 
 	//Donations
 	e.GET("/donations", presenter.DonationPresentation.GetAllDonation)
 	e.GET("/donations/:id", presenter.DonationPresentation.GetDonationsById)
+	e.GET("/donations/trending", presenter.DonationPresentation.GetDonationTrending)
+	e.GET("/donations/latest", presenter.DonationPresentation.GetDonationLatest)
 	auth.POST("/donations", presenter.DonationPresentation.CreateDonation)
 	auth.DELETE("/donations/:id", presenter.DonationPresentation.DeleteDonationsById)
-	auth.PUT("/donations", presenter.DonationPresentation.UpdateDonation)
+	auth.PUT("/donations/:id", presenter.DonationPresentation.UpdateDonation)
+	auth.PUT("/donations/:id", presenter.DonationPresentation.UpdateDonationValue)
 
 	//Comments
 	auth.POST("/donations/:id/comment", presenter.DonationPresentation.CreateComment)

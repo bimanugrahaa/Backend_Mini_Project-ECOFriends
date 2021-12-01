@@ -2,7 +2,6 @@ package response
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
-	"fmt"
 	"time"
 )
 
@@ -31,6 +30,12 @@ type DonationDescription struct {
 	Current_Donation int    `json:"current_donation"`
 }
 
+type DonationAmount struct {
+	ID                  int     `json:"post_id"`
+	Current_Donation    int     `json:"current_donation"`
+	Percentage_Donation float64 `json:"percentage_donation"`
+}
+
 type AuthorDonation struct {
 	ID   int    `json:"author_id"`
 	Name string `json:"name"`
@@ -57,6 +62,14 @@ func FromDescriptionDonationCore(resp donation.DescriptionCore) DonationDescript
 		Description:      resp.Description,
 		Target_Donation:  resp.Target_Donation,
 		Current_Donation: resp.Current_Donation,
+	}
+}
+
+func FromDonationAmount(resp donation.DescriptionCore) DonationAmount {
+	return DonationAmount{
+		ID:                  resp.ID,
+		Current_Donation:    resp.Current_Donation,
+		Percentage_Donation: resp.Percentage_Donation,
 	}
 }
 
@@ -115,7 +128,6 @@ func FromCommentSlice(cc []donation.CommentCore) []CommentDonation {
 		commentArray = append(commentArray, FromCommentCore(cc[key]))
 	}
 
-	fmt.Println(&commentArray)
 	return commentArray
 }
 
