@@ -45,7 +45,6 @@ func (dr *mysqlDonationRepository) RemoveDonationsById(data donation.Core) (err 
 func (dr *mysqlDonationRepository) EditDonation(data donation.Core) (resp donation.Core, err error) {
 	record := fromCore(data)
 	record.Description.ID = data.ID
-	fmt.Println(record)
 
 	if err := dr.Conn.Model(&Donation{}).Where("id = ?", data.ID).Updates(&record).Error; err != nil {
 		return donation.Core{}, err

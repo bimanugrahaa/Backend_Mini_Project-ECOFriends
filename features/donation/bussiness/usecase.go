@@ -4,7 +4,6 @@ import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
 	"Backend_Mini_Project-ECOFriends/features/user"
 	"errors"
-	"fmt"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -59,9 +58,7 @@ func (du *donationUsecase) DeleteDonationsById(data donation.Core) (err error) {
 func (du *donationUsecase) UpdateDonation(data donation.Core) (resp donation.Core, err error) {
 	donationAuthor := du.donationData.SelectDonationsById(data.ID)
 	if data.AuthorID != donationAuthor.AuthorID {
-		fmt.Println("resp", resp)
 
-		fmt.Println(data)
 		err = errors.New("unauthorized")
 		return donation.Core{}, err
 	}

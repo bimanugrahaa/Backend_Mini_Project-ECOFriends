@@ -35,7 +35,7 @@ func New() *echo.Echo {
 	e.GET("/donations/latest", presenter.DonationPresentation.GetDonationLatest)
 	auth.POST("/donations", presenter.DonationPresentation.CreateDonation)
 	auth.DELETE("/donations/:id", presenter.DonationPresentation.DeleteDonationsById)
-	auth.PUT("/donations/:id", presenter.DonationPresentation.UpdateDonation)
+	auth.PUT("/donations/:id/edit", presenter.DonationPresentation.UpdateDonation)
 	auth.PUT("/donations/:id", presenter.DonationPresentation.UpdateDonationValue)
 
 	//Comments

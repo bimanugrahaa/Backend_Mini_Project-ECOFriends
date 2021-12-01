@@ -112,10 +112,7 @@ func (dh *DonationHandler) UpdateDonation(c echo.Context) error {
 
 	c.Bind(&UpdateDonation)
 
-	fmt.Println("resp", claim)
-
 	result, err := dh.donationBussiness.UpdateDonation(presentation_request.ToCore(UpdateDonation))
-	fmt.Println(result)
 	if err != nil {
 		return c.JSON(http.StatusUnauthorized, map[string]interface{}{
 			"message": http.StatusUnauthorized,
