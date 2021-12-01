@@ -10,19 +10,20 @@ import (
 
 type Donation struct {
 	gorm.Model
+	ID                    int
 	Title                 string `gorm:"column:donation_title"`
 	DescriptionDonationID int
 	AuthorID              int
 	Description           DescriptionDonation `gorm:"foreignKey:id"`
-	// Comment               []CommentDonation   `gorm:"foreignKey:CommentDonation.PostID"`
 }
 
 type DescriptionDonation struct {
 	gorm.Model
-	ID               int
-	Description      string `gorm:"column:donation_desc"`
-	Target_Donation  int    `gorm:"column:donation_target"`
-	Current_Donation int    `gorm:"column:donation_current"`
+	ID                  int
+	Description         string  `gorm:"column:donation_desc"`
+	Target_Donation     int     `gorm:"column:donation_target"`
+	Current_Donation    int     `gorm:"column:donation_current"`
+	Percentage_Donation float64 `gorm:"column:donation_percentage"`
 }
 
 type CommentDonation struct {
@@ -38,10 +39,11 @@ type CommentDonation struct {
 
 func toDescriptionCore(dd *DescriptionDonation) donation.DescriptionCore {
 	return donation.DescriptionCore{
-		ID:               dd.ID,
-		Description:      dd.Description,
-		Target_Donation:  dd.Target_Donation,
-		Current_Donation: dd.Current_Donation,
+		ID:                  dd.ID,
+		Description:         dd.Description,
+		Target_Donation:     dd.Target_Donation,
+		Current_Donation:    dd.Current_Donation,
+		Percentage_Donation: dd.Percentage_Donation,
 	}
 }
 
@@ -75,28 +77,18 @@ func toCommentList(resp []CommentDonation) []donation.CommentCore {
 }
 
 func toCoreDetail(d *Donation) donation.Core {
-	// cc := []donation.CommentCore{}
-
-	// fmt.Println(d.Comment)
-	// for _, value := range d.Comment {
-	// 	cc = append(cc, toCommentCore(&value))
-	// }
-	// fmt.Println(cc)
-
 	return donation.Core{
 		ID:          int(d.ID),
 		Title:       d.Title,
 		AuthorID:    d.AuthorID,
 		Created_at:  d.CreatedAt,
 		Description: toDescriptionCore(&d.Description),
-		// Comment:     cc,
 	}
 }
 
 func toCoreList(resp []Donation) []donation.Core {
 	d := []donation.Core{}
 
-	// fmt.Println("d", resp)
 	for _, value := range resp {
 		d = append(d, toCore(&value))
 	}
@@ -106,9 +98,11 @@ func toCoreList(resp []Donation) []donation.Core {
 
 func fromDescriptionCore(dc donation.DescriptionCore) DescriptionDonation {
 	return DescriptionDonation{
-		Description:      dc.Description,
-		Target_Donation:  dc.Target_Donation,
-		Current_Donation: dc.Current_Donation,
+		ID:                  dc.ID,
+		Description:         dc.Description,
+		Target_Donation:     dc.Target_Donation,
+		Current_Donation:    dc.Current_Donation,
+		Percentage_Donation: dc.Percentage_Donation,
 	}
 }
 
@@ -123,6 +117,7 @@ func fromCommentCore(id int, cc donation.CommentCore) CommentDonation {
 
 func fromCore(core donation.Core) Donation {
 	return Donation{
+		ID:          core.ID,
 		Title:       core.Title,
 		AuthorID:    core.AuthorID,
 		Description: fromDescriptionCore(core.Description),

@@ -20,24 +20,23 @@ func NewDonationRepository(conn *gorm.DB) donation.Data {
 func (dr *mysqlDonationRepository) InsertDonation(data donation.Core) (resp donation.Core, err error) {
 
 	record := fromCore(data)
-	// fmt.Println("record", record)
 	if err := dr.Conn.Create(&record).Error; err != nil {
 
 		return donation.Core{}, err
 	}
 
-	// fmt.Println(donation.Core{})
 	return toCoreDetail(&record), nil
 }
 
-func (dr *mysqlDonationRepository) RemoveDonationsById(id int) (err error) {
-	if err := dr.Conn.Delete(&DescriptionDonation{}, id).Error; err != nil {
+func (dr *mysqlDonationRepository) RemoveDonationsById(data donation.Core) (err error) {
+
+	if err := dr.Conn.Delete(&DescriptionDonation{}, data.ID).Error; err != nil {
 		return err
 	}
-	if err := dr.Conn.Delete(&Donation{}, id).Error; err != nil {
+	if err := dr.Conn.Delete(&Donation{}, data.ID).Error; err != nil {
 		return err
 	}
-	if err := dr.Conn.Where("post_id", id).Delete(&CommentDonation{}).Error; err != nil {
+	if err := dr.Conn.Where("post_id", data.ID).Delete(&CommentDonation{}).Error; err != nil {
 		return err
 	}
 	return nil
@@ -45,6 +44,7 @@ func (dr *mysqlDonationRepository) RemoveDonationsById(id int) (err error) {
 
 func (dr *mysqlDonationRepository) EditDonation(data donation.Core) (resp donation.Core, err error) {
 	record := fromCore(data)
+	record.Description.ID = data.ID
 
 	if err := dr.Conn.Model(&Donation{}).Where("id = ?", data.ID).Updates(&record).Error; err != nil {
 		return donation.Core{}, err
@@ -54,7 +54,18 @@ func (dr *mysqlDonationRepository) EditDonation(data donation.Core) (resp donati
 		return donation.Core{}, err
 	}
 
-	return donation.Core{}, nil
+	return toCoreDetail(&record), nil
+}
+
+func (dr *mysqlDonationRepository) EditDonationValue(data donation.DescriptionCore) (resp donation.DescriptionCore, err error) {
+	record := fromDescriptionCore(data)
+	record.ID = data.ID
+
+	if err := dr.Conn.Model(&DescriptionDonation{}).Where("id = ?", data.ID).Updates(&record).Error; err != nil {
+		fmt.Println("err", err)
+	}
+
+	return toDescriptionCore(&record), nil
 }
 
 func (dr *mysqlDonationRepository) SelectAllDonations() (resp []donation.Core) {
@@ -68,10 +79,34 @@ func (dr *mysqlDonationRepository) SelectAllDonations() (resp []donation.Core) {
 	return toCoreList(record)
 }
 
+func (dr *mysqlDonationRepository) SelectDonationsTrending() (resp []donation.Core) {
+
+	var record []Donation
+
+	if err := dr.Conn.Model(&Donation{}).Joins("Description").Order("description.donation_percentage desc").Limit(10).Find(&record).Error; err != nil {
+
+		return []donation.Core{}
+	}
+
+	return toCoreList(record)
+}
+
+func (dr *mysqlDonationRepository) SelectDonationsLatest() (resp []donation.Core) {
+
+	var record []Donation
+
+	if err := dr.Conn.Model(&Donation{}).Order("created_at desc").Limit(10).Find(&record).Error; err != nil {
+
+		return []donation.Core{}
+	}
+
+	return toCoreList(record)
+}
+
 func (dr *mysqlDonationRepository) SelectDonationsById(id int) (resp donation.Core) {
 	var record Donation
 
-	if err := dr.Conn.First(&record, id).Error; err != nil {
+	if err := dr.Conn.Preload("Description").First(&record, id).Error; err != nil {
 		return donation.Core{}
 	}
 
@@ -81,41 +116,48 @@ func (dr *mysqlDonationRepository) SelectDonationsById(id int) (resp donation.Co
 func (dr *mysqlDonationRepository) InsertComment(id int, data donation.CommentCore) (resp donation.CommentCore, err error) {
 
 	record := fromCommentCore(id, data)
-	fmt.Println("record", record)
 	if err := dr.Conn.Model(&CommentDonation{}).Create(&record).Error; err != nil {
 
 		return donation.CommentCore{}, err
 	}
 
-	fmt.Println(dr.Conn.Create(&record))
-	return donation.CommentCore{}, nil
+	return toCommentCore(&record), nil
 }
 
 func (dr *mysqlDonationRepository) SelectCommentByPostId(id int) (resp []donation.CommentCore, err error) {
 
 	var record []CommentDonation
 
-	// fmt.Println(&resp)
 	if err := dr.Conn.Model(&CommentDonation{}).Where("post_id = ?", id).Find(&record).Error; err != nil {
 		return []donation.CommentCore{}, err
 	}
-	fmt.Println(record)
 
 	return toCommentList(record), nil
 }
 
+func (dr *mysqlDonationRepository) SelectCommentById(id int) (resp donation.CommentCore, err error) {
+	var record CommentDonation
+
+	if err := dr.Conn.Model(&CommentDonation{}).First(&record, id).Error; err != nil {
+		return donation.CommentCore{}, err
+	}
+
+	return toCommentCore(&record), nil
+}
+
 func (dr *mysqlDonationRepository) EditComment(data donation.CommentCore) (resp donation.CommentCore, err error) {
 	record := fromCommentCore(data.PostID, data)
+	record.ID = data.ID
 
 	if err := dr.Conn.Model(&CommentDonation{}).Where("id = ?", data.ID).Updates(&record).Error; err != nil {
 		return donation.CommentCore{}, err
 	}
 
-	return donation.CommentCore{}, nil
+	return toCommentCore(&record), nil
 }
 
-func (dr *mysqlDonationRepository) RemoveComment(id int) (err error) {
-	if err := dr.Conn.Delete(&CommentDonation{}, id).Error; err != nil {
+func (dr *mysqlDonationRepository) RemoveComment(data donation.CommentCore) (err error) {
+	if err := dr.Conn.Delete(&CommentDonation{}, data.ID).Error; err != nil {
 		return err
 	}
 

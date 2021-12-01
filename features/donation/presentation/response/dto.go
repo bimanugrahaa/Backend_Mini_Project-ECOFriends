@@ -2,7 +2,6 @@ package response
 
 import (
 	"Backend_Mini_Project-ECOFriends/features/donation"
-	"fmt"
 	"time"
 )
 
@@ -31,6 +30,12 @@ type DonationDescription struct {
 	Current_Donation int    `json:"current_donation"`
 }
 
+type DonationAmount struct {
+	ID                  int     `json:"post_id"`
+	Current_Donation    int     `json:"current_donation"`
+	Percentage_Donation float64 `json:"percentage_donation"`
+}
+
 type AuthorDonation struct {
 	ID   int    `json:"author_id"`
 	Name string `json:"name"`
@@ -44,12 +49,27 @@ type CommentDonation struct {
 	Status  bool   `json:"status"`
 }
 
+type CommentUpdateDonation struct {
+	ID      int    `json:"comment_id"`
+	Comment string `json:"comment"`
+	PostID  int    `json:"post_id"`
+	Status  bool   `json:"status"`
+}
+
 func FromDescriptionDonationCore(resp donation.DescriptionCore) DonationDescription {
 	return DonationDescription{
 		ID:               resp.ID,
 		Description:      resp.Description,
 		Target_Donation:  resp.Target_Donation,
 		Current_Donation: resp.Current_Donation,
+	}
+}
+
+func FromDonationAmount(resp donation.DescriptionCore) DonationAmount {
+	return DonationAmount{
+		ID:                  resp.ID,
+		Current_Donation:    resp.Current_Donation,
+		Percentage_Donation: resp.Percentage_Donation,
 	}
 }
 
@@ -66,6 +86,15 @@ func FromCommentCore(cc donation.CommentCore) CommentDonation {
 		Comment: cc.Comment,
 		PostID:  cc.PostID,
 		UserID:  cc.UserID,
+		Status:  cc.Status,
+	}
+}
+
+func FromCommentUpdateCore(cc donation.CommentCore) CommentUpdateDonation {
+	return CommentUpdateDonation{
+		ID:      cc.ID,
+		Comment: cc.Comment,
+		PostID:  cc.PostID,
 		Status:  cc.Status,
 	}
 }
@@ -99,7 +128,6 @@ func FromCommentSlice(cc []donation.CommentCore) []CommentDonation {
 		commentArray = append(commentArray, FromCommentCore(cc[key]))
 	}
 
-	fmt.Println(&commentArray)
 	return commentArray
 }
 

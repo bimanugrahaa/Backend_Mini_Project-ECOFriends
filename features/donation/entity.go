@@ -15,10 +15,11 @@ type Core struct {
 }
 
 type DescriptionCore struct {
-	ID               int
-	Description      string
-	Target_Donation  int
-	Current_Donation int
+	ID                  int
+	Description         string
+	Target_Donation     int
+	Current_Donation    int
+	Percentage_Donation float64
 }
 
 type UserCore struct {
@@ -39,13 +40,16 @@ type Bussiness interface {
 	CreateDonation(data Core) (resp Core, err error)
 	GetAllDonations() (resp []Core)
 	GetDonationsById(id int) (resp Core)
-	DeleteDonationsById(id int) (err error)
+	GetDonationTrending() (resp []Core)
+	GetDonationLatest() (resp []Core)
+	DeleteDonationsById(data Core) (err error)
 	UpdateDonation(data Core) (resp Core, err error)
+	UpdateDonationValue(data DescriptionCore) (resp DescriptionCore, err error)
 
 	CreateComment(id int, data CommentCore) (resp CommentCore, err error)
 	GetCommentByPostId(id int) (resp []CommentCore, err error)
 	UpdateComment(data CommentCore) (resp CommentCore, err error)
-	DeleteComment(id int) (err error)
+	DeleteComment(data CommentCore) (err error)
 	//Another CRUD
 }
 
@@ -54,11 +58,15 @@ type Data interface {
 	InsertDonation(data Core) (resp Core, err error)
 	SelectAllDonations() (resp []Core)
 	SelectDonationsById(id int) (resp Core)
-	RemoveDonationsById(id int) (err error)
+	SelectDonationsTrending() (resp []Core)
+	SelectDonationsLatest() (resp []Core)
+	RemoveDonationsById(data Core) (err error)
 	EditDonation(data Core) (resp Core, err error)
+	EditDonationValue(data DescriptionCore) (resp DescriptionCore, err error)
 
 	InsertComment(id int, data CommentCore) (resp CommentCore, err error)
 	SelectCommentByPostId(id int) (resp []CommentCore, err error)
+	SelectCommentById(id int) (resp CommentCore, err error)
 	EditComment(data CommentCore) (resp CommentCore, err error)
-	RemoveComment(id int) (err error)
+	RemoveComment(data CommentCore) (err error)
 }
