@@ -94,15 +94,15 @@ func TestCreateUser(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("valid - create user", func(t *testing.T) {
+	t.Run("invalid - error create user", func(t *testing.T) {
 		userData.On("SelectUserEmail", mock.AnythingOfType("user.UserCore")).Return(userValue, nil).Once()
-		userData.On("InsertUser", mock.AnythingOfType("user.UserCore")).Return(userValue, errors.New("error insert data")).Once()
+		userData.On("InsertUser", mock.AnythingOfType("user.UserCore")).Return(userValue, errors.New("error insert user")).Once()
 		_, err := userUseCase.CreateUser(user.UserCore{
 			Email: "barrykeoghan2@gmail.com",
 		})
 
 		assert.NotNil(t, err)
-		assert.Equal(t, err.Error(), "error insert data")
+		assert.Equal(t, err.Error(), "error insert user")
 	})
 
 	t.Run("invalid email - data is available", func(t *testing.T) {
@@ -112,5 +112,47 @@ func TestCreateUser(t *testing.T) {
 		assert.NotNil(t, err)
 		assert.Equal(t, err.Error(), "data is available")
 	})
+}
 
+func TestUpdateUser(t *testing.T) {
+	t.Run("valid - update user", func(t *testing.T) {
+		userData.On("SelectUserById", mock.AnythingOfType("int")).Return(usersValue[0], nil).Once()
+		userData.On("EditUser", mock.AnythingOfType("user.UserCore")).Return(userValue, nil).Once()
+		resp, err := userUseCase.UpdateUser(user.UserCore{
+			Email: "barrykeoghan2@gmail.com",
+		})
+
+		assert.Nil(t, err)
+		assert.Equal(t, resp.Email, userValue.Email)
+	})
+
+	t.Run("invalid - error update user", func(t *testing.T) {
+		userData.On("SelectUserById", mock.AnythingOfType("int")).Return(usersValue[0], nil).Once()
+		userData.On("EditUser", mock.AnythingOfType("user.UserCore")).Return(userValue, errors.New("error edit user")).Once()
+		_, err := userUseCase.UpdateUser(user.UserCore{
+			Email: "barrykeoghan2@gmail.com",
+		})
+
+		assert.NotNil(t, err)
+		assert.Equal(t, err.Error(), "error edit user")
+	})
+}
+
+func TestDeleteUser(t *testing.T) {
+	t.Run("valid - delete user", func(t *testing.T) {
+		userData.On("RemoveUser", mock.AnythingOfType("int")).Return(nil).Once()
+
+		err := userUseCase.DeleteUser(userValue.ID)
+
+		assert.Nil(t, err)
+	})
+
+	t.Run("invalid - error delete user", func(t *testing.T) {
+		userData.On("RemoveUser", mock.AnythingOfType("int")).Return(errors.New("error remove user")).Once()
+
+		err := userUseCase.DeleteUser(userValue.ID)
+
+		assert.NotNil(t, err)
+		assert.Equal(t, err.Error(), "error remove user")
+	})
 }
