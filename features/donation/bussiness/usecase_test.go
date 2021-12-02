@@ -14,18 +14,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-// var (
-// 	donationBussiness   donation.Bussiness
-// 	donationValue        donation.Core
-// 	donationDescription donation.DescriptionCore
-// 	donationComment     donation.CommentCore
-// 	donationData  mocks.donationData
-// 	donations           []donation.Core
-// 	// donationData
-// 	// donationValue donation.Core
-
-// )
-
 var (
 	donationValue       donation.Core
 	donationUseCase     donation.Bussiness
