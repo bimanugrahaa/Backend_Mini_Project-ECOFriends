@@ -10,18 +10,6 @@ func AutoMigrate() {
 	config.DB.AutoMigrate(
 		&m_donation.Donation{},
 		&m_donation.DescriptionDonation{},
-    &m_user.User{})
+		&m_donation.CommentDonation{},
+		&m_user.User{})
 }
-
-//To migrate two and up
-// func AutoMigrate() {
-// 	config.DB.AutoMigrate(&m_donation.Donation{}, &m_user.User{})
-// }
-
-// var (
-// 	mCreateTableUser createTableUser = createTableUser{config.DB.Migrator()}
-// )
-
-// func MigrateUp() {
-// 	mCreateTableUser.up()
-// }

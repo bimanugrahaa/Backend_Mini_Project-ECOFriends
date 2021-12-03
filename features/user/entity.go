@@ -9,15 +9,27 @@ type UserCore struct {
 	Name       string
 	Email      string
 	Password   string
+	Token      string
 	Created_at time.Time
 }
 
 type Bussiness interface {
 	CreateUser(data UserCore) (resp UserCore, err error)
 	GetAllUser() (resp []UserCore)
+	GetUserById(id int) (resp UserCore, err error)
+	UpdateUser(data UserCore) (resp UserCore, err error)
+	DeleteUser(id int) (err error)
+
+	Login(data UserCore) (resp UserCore, err error)
 }
 
 type Data interface {
-	InsertData(data UserCore) (resp UserCore, err error)
-	SelectData() (resp []UserCore)
+	InsertUser(data UserCore) (resp UserCore, err error)
+	SelectAllUser() (resp []UserCore)
+	SelectUserById(id int) (resp UserCore, err error)
+	SelectUserEmail(data UserCore) (resp UserCore, err error)
+	EditUser(data UserCore) (resp UserCore, err error)
+	RemoveUser(id int) (err error)
+
+	Login(data UserCore) (resp UserCore, err error)
 }

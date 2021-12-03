@@ -18,15 +18,15 @@ type Presenter struct {
 
 func Init() Presenter {
 
-	//Donation
-	donationData := _donation_data.NewDonationRepository(config.DB)
-	donationBussiness := _donation_bussiness.NewDonationBussiness(donationData)
-	donationPresentation := _donation_presentation.NewDonationHandler(donationBussiness)
-
 	//User
 	userData := _user_data.NewUserRepository(config.DB)
 	userBussiness := _user_bussiness.NewUserBussiness(userData)
 	userPresentation := _user_presentation.NewUserHandler(userBussiness)
+
+	//Donation
+	donationData := _donation_data.NewDonationRepository(config.DB)
+	donationBussiness := _donation_bussiness.NewDonationBussiness(donationData, userBussiness)
+	donationPresentation := _donation_presentation.NewDonationHandler(donationBussiness)
 
 	return Presenter{
 		DonationPresentation: donationPresentation,

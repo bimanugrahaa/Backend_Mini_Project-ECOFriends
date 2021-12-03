@@ -11,23 +11,33 @@ type User struct {
 	Name     string
 	Email    string
 	Password string
+	Token    string
 }
 
-func (u *User) toCore() user.UserCore {
+func toCore(u *User) user.UserCore {
 	return user.UserCore{
 		ID:         int(u.ID),
 		Name:       u.Name,
 		Email:      u.Email,
 		Password:   u.Password,
+		Token:      u.Token,
 		Created_at: u.CreatedAt,
 	}
 }
 
 func toCoreList(resp []User) []user.UserCore {
 	u := []user.UserCore{}
-	for key := range resp {
-		u = append(u, resp[key].toCore())
+	for _, value := range resp {
+		u = append(u, toCore(&value))
 	}
 
 	return u
+}
+
+func fromCore(core user.UserCore) User {
+	return User{
+		Name:     core.Name,
+		Email:    core.Email,
+		Password: core.Password,
+	}
 }
