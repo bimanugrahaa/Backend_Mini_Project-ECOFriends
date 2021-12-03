@@ -3,6 +3,7 @@ package routes
 import (
 	"Backend_Mini_Project-ECOFriends/config"
 	"Backend_Mini_Project-ECOFriends/factory"
+	log "Backend_Mini_Project-ECOFriends/middleware"
 	"net/http"
 
 	"github.com/golang-jwt/jwt"
@@ -16,6 +17,7 @@ func New() *echo.Echo {
 
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
+	log.LogMiddleware(e)
 	auth := e.Group("")
 	auth.Use(middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningMethod: jwt.SigningMethodHS256.Name,
